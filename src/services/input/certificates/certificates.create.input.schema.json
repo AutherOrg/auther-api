@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "certificates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": false
+}
