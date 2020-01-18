@@ -1,32 +1,7 @@
-const Sequelize = require('sequelize')
-
 const db = require('../../services/database/database.service')
-const userConstants = require('./users.constants')
+const table = require('./users.table')
 
-const usersModel = db.define('users', {
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-    validate: {
-      isEmail: true
-    }
-  },
-  status: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    defaultValue: userConstants.statuses.ACTIVE
-  },
-  role: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    defaultValue: userConstants.roles.RECIPIENT
-  },
-  passwordHash: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: ''
-  }
-}, {
+module.exports = db.define('Users', table, {
   defaultScope: {
     attributes: { exclude: ['passwordHash'] }
   },
@@ -36,5 +11,3 @@ const usersModel = db.define('users', {
     }
   }
 })
-
-module.exports = usersModel

@@ -1,7 +1,7 @@
 const constants = require('../models/users/users.constants')
 const passwordService = require('../services/password/password.service')
 
-const collection = 'users'
+const collection = 'Users'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {

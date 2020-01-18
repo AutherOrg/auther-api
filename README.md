@@ -10,48 +10,33 @@ This project is purely a backend server. It's intended to be best used with the 
 
 *This application has been originally developed with financial support by GIZ Lab as a component of a project with [GIZ](https://www.giz.de/en/html/index.html) (Deutsche Gesellschaft für Internationale Zusammenarbeit GmbH) and [SEAMEO INNOTECH](https://www.seameo-innotech.org/) (Regional Center for Educational Innovation and Technology, Southeast Asian Ministers of Education Organization).*
 
-## Installation
-
-### Requirements
+## Requirements
 
 + Node.js (this project is developed with Node.js version 13 but many older versions should work).
 + A MySql or MariaDb database
 
-### Installation
+## Installation
 
 ````
 yarn install
 cp .env.example .env
+cp src/seeders/1_users.seed.js.example src/seeders/1_users.seed.js
 ````
 
 *If you don't have yarn, you can use npm instead.*
 
-Edit .env to set your credentials.
+Edit .env to set your credentials and src/seeders/1_users.seed.js to set the administrator account.
 
-### Initial database tables creation
+Init the database:
 
-Launch the server:
+````
+yarn set
+````
+
+Start the server (development mode):
 
 ````
 yarn start
-````
-
-At the first launch, the DB structure will be created.
-
-Then, in order to keep the DB each time the server restarts, you must stop the server, edit .env to set DB_SYNC=0 and relaunch the server.
-
-### Administrator account
-
-Now you must create an administrator account.
-
-````
-cp src/seeders/1_users.seed.js.example src/seeders/1_users.seed.js
-````
-
-Edit src/seeders/1_users.seed.js with your credentials and finally:
-
-````
-yarn seed
 ````
 
 ## Sign certificates

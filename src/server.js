@@ -3,14 +3,8 @@ const passport = require('passport')
 const bodyParser = require('body-parser')
 
 const config = require('./config')
-const db = require('./services/database/database.service')
 const hookJwtStrategy = require('./services/passport/jwtStrategy.service')
 const routes = require('./routes')
-
-// (Re)create DB tables if necessary.
-if (Number(config.db.sync) === 1) {
-  db.sync({ force: true })
-}
 
 const app = express()
 
