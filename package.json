@@ -8,8 +8,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "doc": "./node_modules/apidoc/bin/apidoc -i src/ -o ./doc",
+    "doc": "apidoc -i src/ -o ./doc",
     "lint": "standard",
+    "seed": "sequelize db:seed:all",
     "start": "nodemon server.js"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "nodemailer": "^6.4.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "sequelize": "^5.21.3"
+    "sequelize": "^5.21.3",
+    "sequelize-cli": "^5.5.1"
   }
 }
