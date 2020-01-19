@@ -1,6 +1,6 @@
 module.exports = {
   status: {
-    SHARED: 1,
-    NOT_SHARED: 2
+    NOT_SHARED: 0,
+    SHARED: 1
   }
 }

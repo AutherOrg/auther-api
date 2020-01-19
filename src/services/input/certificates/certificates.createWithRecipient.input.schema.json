@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "certificate": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

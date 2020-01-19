@@ -1,44 +1,66 @@
+const jsonwebtoken = require('jsonwebtoken')
+
+const config = require('../../config')
 const Certificates = require('../../models/certificates/certificates.model')
+const certificatesConstants = require('../../models/certificates/certificates.constants')
+const Users = require('../../models/users/users.model')
 const userConstants = require('../../models/users/users.constants')
 const inputService = require('../../services/input/input.service')
 const blockcertsSchemaService = require('../../services/schemas/blockcerts.schema.service')
+const mailService = require('../../services/mail/mail.service')
 
-const create = async (req, res) => {
+const createWithRecipient = async (req, res) => {
   try {
     const { user, body } = req
     if (![userConstants.role.ADMIN, userConstants.role.ISSUER].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    const isValidInput = inputService.validate('./certificates/certificates.create.input.schema.json', req)
+    const isValidInput = inputService.validate('./certificates/certificates.createWithRecipient.input.schema.json', req)
     if (!isValidInput) {
       return res.status(400).json({ error: 'Bad request' })
     }
-    const { certificates } = body
-    const areValid = await Promise.all(
-      certificates.map(async certificate => {
-        const isValid = await blockcertsSchemaService.validate(certificate)
-        return isValid
+    const { certificate } = body
+    const isValid = await blockcertsSchemaService.validate(certificate)
+    if (isValid) {
+      const email = certificate.recipient.identity.toLowerCase()
+      // Sign a permanent token.
+      const permanentToken = jsonwebtoken.sign({ email }, config.passport.secret)
+      // Find out if the recipient user already exists.
+      let recipient = await Users.findOne({
+        where: {
+          email
+        }
       })
-    )
-    const areAllValid = areValid.every(isValid => isValid)
-    if (areAllValid) {
-      const createdCertificates = await Promise.all(
-        certificates.map(async certificate => {
-          const createdCertificate = await Certificates.create({
-            json: certificate,
-            user_id: req.user.id
-          })
-          return createdCertificate
+      // Create a new recipient user.
+      if (!recipient) {
+        recipient = await Users.create({
+          email,
+          status: userConstants.status.INACTIVE,
+          role: userConstants.role.RECIPIENT
         })
+      }
+      // Create certificate.
+      const createdCertificate = await Certificates.create({
+        json: certificate,
+        recipientId: recipient.id,
+        issuerId: req.user.id
+      })
+      // Notify recipient.
+      const sendMailResult = await mailService.send(
+        config.nodemailer.auth.user,
+        email,
+        `[${config.applicationName}] You have a new certificate`,
+        `A new certificate has been issued to you. Click on this link to manage it: ${config.validateUrl}${permanentToken}. This will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.`,
+        '<p>TODO html</p>'
       )
       return res.status(200).json({
-        certificates: createdCertificates
+        certificate: createdCertificate,
+        sendMailResult
       })
     }
     return res.status(400).json({
-      error: 'Some unsigned certificates are not valid',
-      areValid,
-      certificates
+      error: 'Invalid certificate',
+      certificate
     })
   } catch (e) {
     return res.status(500).json({ error: e.message })
@@ -68,14 +90,18 @@ const getOne = async (req, res) => {
         uuid: req.params.uuid
       }
     })
-    return res.status(200).json(certificate)
+    if (certificate.status === certificatesConstants.status.SHARED) {
+      return res.status(200).json(certificate)
+    } else {
+      return res.status(403).json({ error: 'Unauthorized: this certificate is not shared' })
+    }
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
 }
 
 module.exports = {
-  create,
+  createWithRecipient,
   getMany,
   getOne
 }

@@ -11,7 +11,7 @@ module.exports = {
   status: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: constants.status.SHARED
+    defaultValue: constants.status.NOT_SHARED
   },
   uuid: {
     type: Sequelize.UUID,
@@ -29,5 +29,11 @@ module.exports = {
   },
   updatedAt: {
     type: Sequelize.DATE
+  },
+  recipientId: {
+    type: Sequelize.INTEGER
+  },
+  issuerId: {
+    type: Sequelize.INTEGER
   }
 }

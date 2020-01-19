@@ -19,65 +19,33 @@ const routes = passport => {
   router.post('/', passport.authenticate('jwt', { session: false }), controller.create)
 
   /**
-   * @api {get} /users Get users
+   * @api {get} /users Get all users
    * @apiVersion 1.0.0
    * @apiName GetUsers
    * @apiGroup Users
-   * @apiPermission recipient, issuer, admin
-   * @apiDescription
-   *
-   * For recipient and issuer, only get the active user himself.
-   *
-   * For admin, return all users.
-   *
+   * @apiPermission admin
+   * @apiDescription Return all users.
    * @apiSuccess {Object[]} data Array of users (see GetUser)
    */
   router.get('/', passport.authenticate('jwt', { session: false }), controller.getMany)
 
   /**
-   * @api {get} /users/:id Get user
+   * @api {get} /users/:id Get one user
    * @apiVersion 1.0.0
    * @apiName GetUser
    * @apiGroup Users
    * @apiPermission admin
-   * @apiDescription Return any user.
+   * @apiDescription Return one user.
    * @apiParam {Number} id User ID
-   * @apiSuccess {Object} data User object
-   * @apiSuccess {Number} data.id User ID
-   * @apiSuccess {String} data.email
-   * @apiSuccess {Number} data.status 1=active
-   * @apiSuccess {Number} data.role 1=admin, 2=issuer, 3=recipient
+   * @apiSuccess {Object} user User object
+   * @apiSuccess {Number} user.id User ID
+   * @apiSuccess {String} user.email
+   * @apiSuccess {Number} user.status 1=active
+   * @apiSuccess {Number} user.role 1=admin, 2=issuer, 3=recipient
+   * @apiSuccess {String} user.createdAt
+   * @apiSuccess {String} user.updatedAt
    */
   router.get('/:id', passport.authenticate('jwt', { session: false }), controller.getOne)
-
-  /**
-   * @api {post} /users/register Send an email with a register link
-   * @apiVersion 1.0.0
-   * @apiName PostUserRegister
-   * @apiGroup Users
-   * @apiPermission public
-   * @apiDescription Send an email with a register link.
-   * @apiParam {Object} user
-   * @apiParam {String} user.email User email
-   * @apiSuccess {Object} data
-   * @apiSuccess {String} data.sendMailResult
-   */
-  router.post('/register', controller.register)
-
-  /**
-   * @api {post} /users/validate Validate an email and create a user
-   * @apiVersion 1.0.0
-   * @apiName PostUserValidate
-   * @apiGroup Users
-   * @apiPermission public
-   * @apiDescription Validate an email and create a user.
-   * @apiParam {Object} user
-   * @apiParam {String} user.password
-   * @apiParam {String} registrationToken
-   * @apiSuccess {Object} data
-   * @apiSuccess {String} data.user User object (see GetUser)
-   */
-  router.post('/validate', controller.validate)
 
   return router
 }

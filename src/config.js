@@ -24,5 +24,6 @@ module.exports = {
       pass: process.env.NODEMAILER_PASS
     }
   },
-  validateUrl: process.env.VALIDATE_URL
+  validateUrl: process.env.VALIDATE_URL,
+  applicationName: process.env.APPLICATION_NAME
 }
