@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "create": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "apidoc -i src/ -o ./doc",
+    "initdb": "sequelize db:migrate && sequelize db:seed:all",
     "lint": "standard",
     "start": "nodemon server.js"
   },

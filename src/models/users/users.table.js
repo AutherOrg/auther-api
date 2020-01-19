@@ -12,12 +12,12 @@ module.exports = {
   status: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: constants.statuses.ACTIVE
+    defaultValue: constants.status.INACTIVE
   },
   role: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: constants.roles.RECIPIENT
+    defaultValue: constants.role.RECIPIENT
   },
   passwordHash: {
     type: Sequelize.STRING,

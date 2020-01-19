@@ -33,8 +33,6 @@ const validate = async data => {
   }
 }
 
-const service = {
+module.exports = {
   validate
 }
-
-module.exports = service

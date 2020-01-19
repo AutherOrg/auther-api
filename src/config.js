@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const config = {
+module.exports = {
   server: {
     protocol: process.env.SERVER_PROTOCOL,
     host: process.env.SERVER_HOST,
@@ -26,5 +26,3 @@ const config = {
   },
   validateUrl: process.env.VALIDATE_URL
 }
-
-module.exports = config

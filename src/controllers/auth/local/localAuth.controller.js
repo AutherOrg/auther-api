@@ -39,8 +39,6 @@ const authenticate = async (req, res) => {
   }
 }
 
-const controller = {
+module.exports = {
   authenticate
 }
-
-module.exports = controller

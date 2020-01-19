@@ -13,8 +13,6 @@ const validate = (schema, data) => {
   }
 }
 
-const service = {
+module.exports = {
   validate
 }
-
-module.exports = service

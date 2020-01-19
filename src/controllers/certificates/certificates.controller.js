@@ -6,7 +6,7 @@ const blockcertsSchemaService = require('../../services/schemas/blockcerts.schem
 const create = async (req, res) => {
   try {
     const { user, body } = req
-    if (![userConstants.roles.ADMIN, userConstants.roles.ISSUER].includes(user.role)) {
+    if (![userConstants.role.ADMIN, userConstants.role.ISSUER].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
     const isValidInput = inputService.validate('./certificates/certificates.create.input.schema.json', req)
@@ -49,7 +49,7 @@ const getMany = async (req, res) => {
   try {
     const { user } = req
     const where = {}
-    if (![userConstants.roles.ADMIN].includes(user.role)) {
+    if (![userConstants.role.ADMIN].includes(user.role)) {
       where.user_id = user.id
     }
     const certificates = await Certificates.findAll({
@@ -74,10 +74,8 @@ const getOne = async (req, res) => {
   }
 }
 
-const controller = {
+module.exports = {
   create,
   getMany,
   getOne
 }
-
-module.exports = controller

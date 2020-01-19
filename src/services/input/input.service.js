@@ -10,8 +10,6 @@ const validate = (inputSchemaFile, req) => {
   return isValid
 }
 
-const service = {
+module.exports = {
   validate
 }
-
-module.exports = service

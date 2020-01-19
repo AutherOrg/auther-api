@@ -85,7 +85,7 @@ const validate = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { user, body } = req
-    if (![userConstants.roles.ADMIN].includes(user.role)) {
+    if (![userConstants.role.ADMIN].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
     const isValidInput = inputService.validate('./users/users.create.input.schema.json', req)
@@ -124,7 +124,7 @@ const create = async (req, res) => {
 const getMany = async (req, res) => {
   const { user } = req
   const where = {}
-  if (![userConstants.roles.ADMIN].includes(user.role)) {
+  if (![userConstants.role.ADMIN].includes(user.role)) {
     where.id = user.id
   }
   try {
@@ -141,7 +141,7 @@ const getMany = async (req, res) => {
 const getOne = async (req, res) => {
   const { user, params } = req
   const { id } = params
-  if (![userConstants.roles.ADMIN].includes(user.role)) {
+  if (![userConstants.role.ADMIN].includes(user.role)) {
     return res.status(403).json({ error: 'Unauthorized' })
   }
   try {

@@ -26,7 +26,7 @@ const routes = passport => {
    * @apiPermission recipient, issuer, admin
    * @apiDescription
    *
-   * For recipient and issuer roles, only get the active user himself.
+   * For recipient and issuer, only get the active user himself.
    *
    * For admin, return all users.
    *

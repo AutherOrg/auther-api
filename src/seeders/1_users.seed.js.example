@@ -17,8 +17,8 @@ async function insert (queryInterface) {
 
   const admin = {
     email: 'admin@example.com',
-    status: constants.statuses.ACTIVE,
-    role: constants.roles.ADMIN,
+    status: constants.status.ACTIVE,
+    role: constants.role.ADMIN,
     passwordHash: await passwordService.hash('wxc123'),
     createdAt: new Date(),
     updatedAt: new Date()
