@@ -13,9 +13,7 @@ const routes = () => {
    * @apiParam {Object} user object
    * @apiParam {String} user.email
    * @apiParam {String} user.password
-   * @apiSuccess {Object} user
-   * @apiSuccess {String} user.email
-   * @apiSuccess {String} user.password
+   * @apiSuccess {Object} user (see GetUser)
    * @apiSuccess {String} token Json web token
    */
   router.post('/', controller.authenticate)
@@ -28,12 +26,37 @@ const routes = () => {
    * @apiPermission public
    * @apiDescription Post a permanent token and return a JWT and the user.
    * @apiParam {String} permanentToken
-   * @apiSuccess {Object} user
-   * @apiSuccess {String} user.email
-   * @apiSuccess {String} user.password
+   * @apiSuccess {Object} user (see GetUser)
    * @apiSuccess {String} token Json web token
    */
   router.post('/permanent', controller.authenticateFromPermanentToken)
+
+  /**
+   * @api {post} /auth/local/password/set Set password
+   * @apiVersion 1.0.0
+   * @apiName PostAuthLocalPasswordSet
+   * @apiGroup Auth
+   * @apiPermission public
+   * @apiDescription Set password. The password will be set only after verification of the email.
+   * @apiParam {string} email
+   * @apiParam {String} password
+   * @apiSuccess {String} passwordToken The token to set the password
+   * @apiSuccess {Object} sendMailResult (see https://nodemailer.com/usage/#sending-mail)
+   */
+  router.post('/password/set', controller.setPassword)
+
+  /**
+   * @api {post} /auth/local/password/validate Validate password change
+   * @apiVersion 1.0.0
+   * @apiName PostAuthLocalPasswordValidate
+   * @apiGroup Auth
+   * @apiPermission public
+   * @apiDescription Validate password.
+   * @apiParam {String} passwordToken The token sent by email to set the password.
+   * @apiSuccess {Object} user (see GetUser)
+   * @apiSuccess {String} token Json web token
+   */
+  router.post('/password/validate', controller.validatePassword)
 
   return router
 }

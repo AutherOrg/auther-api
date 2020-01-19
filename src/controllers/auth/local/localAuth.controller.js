@@ -2,9 +2,10 @@ const jsonwebtoken = require('jsonwebtoken')
 
 const config = require('../../../config')
 const Users = require('../../../models/users/users.model')
+const usersConstants = require('../../../models/users/users.constants')
 const inputService = require('../../../services/input/input.service')
 const passwordService = require('../../../services/password/password.service')
-const usersConstants = require('../../../models/users/users.constants')
+const mailService = require('../../../services/mail/mail.service')
 
 const authenticate = async (req, res) => {
   try {
@@ -43,7 +44,7 @@ const authenticate = async (req, res) => {
 
 const authenticateFromPermanentToken = async (req, res) => {
   try {
-    const isValidInput = inputService.validate('./auth/local.auth.authenticateFromPermanentToken.input.schema.json', req)
+    const isValidInput = inputService.validate('./auth/local/local.auth.authenticateFromPermanentToken.input.schema.json', req)
     if (!isValidInput) {
       return res.status(400).json({ error: 'Bad request' })
     }
@@ -61,15 +62,77 @@ const authenticateFromPermanentToken = async (req, res) => {
     if (!existingUser) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    if (existingUser.status === usersConstants.status.INACTIVE) {
-      Users.update({
-        status: usersConstants.status.ACTIVE
-      }, {
-        where: {
-          id: existingUser.id
-        }
-      })
+    const token = jsonwebtoken.sign(
+      { id: existingUser.id },
+      config.passport.secret,
+      { expiresIn: '24h' }
+    )
+    return res.status(200).json({
+      user: existingUser,
+      token
+    })
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const setPassword = async (req, res) => {
+  try {
+    const isValidInput = inputService.validate('./auth/local/local.auth.setPassword.input.schema.json', req)
+    if (!isValidInput) {
+      return res.status(400).json({ error: 'Bad request' })
     }
+    const { body } = req
+    const { email, password } = body
+    const passwordToken = jsonwebtoken.sign({ email, password }, config.passport.secret, { expiresIn: '1h' })
+    const sendMailResult = await mailService.send(
+      config.nodemailer.auth.user,
+      email,
+      `[${config.applicationName}] Validate your new password`,
+      `Please click on this link to validate your new password: ${config.validatePasswordUrl}${passwordToken}`,
+      '<p>TODO html</p>'
+    )
+    return res.status(200).json({
+      passwordToken,
+      sendMailResult
+    })
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const validatePassword = async (req, res) => {
+  try {
+    const isValidInput = inputService.validate('./auth/local/local.auth.validatePassword.input.schema.json', req)
+    if (!isValidInput) {
+      return res.status(400).json({ error: 'Bad request' })
+    }
+    const { body } = req
+    const { passwordToken } = body
+    const decodedToken = jsonwebtoken.decode(passwordToken)
+    if (!decodedToken) {
+      return res.status(400).json({ error: 'Invalid password token' })
+    }
+    const existingUser = await Users.findOne({
+      where: {
+        email: decodedToken.email
+      }
+    })
+    if (!existingUser) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const passwordHash = await passwordService.hash(decodedToken.password)
+    const data = {
+      passwordHash
+    }
+    if (existingUser.status === usersConstants.status.INACTIVE) {
+      data.status = usersConstants.status.ACTIVE
+    }
+    Users.update(data, {
+      where: {
+        id: existingUser.id
+      }
+    })
     const token = jsonwebtoken.sign(
       { id: existingUser.id },
       config.passport.secret,
@@ -86,5 +149,7 @@ const authenticateFromPermanentToken = async (req, res) => {
 
 module.exports = {
   authenticate,
-  authenticateFromPermanentToken
+  authenticateFromPermanentToken,
+  setPassword,
+  validatePassword
 }

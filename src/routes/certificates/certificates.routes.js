@@ -11,7 +11,8 @@ const routes = passport => {
    * @apiPermission admin, issuer
    * @apiDescription Create a certificate and associate it with a recipient: either an already one with the same email, or create a new recipient on the fly.
    * @apiParam {Object} certificate
-   * @apiSuccess {Object} Created certificate (see GetCertificate)
+   * @apiSuccess {Object} certificate Created certificate (see GetCertificate)
+   * @apiSuccess {Object} sendMailResult (see https://nodemailer.com/usage/#sending-mail)
    */
   router.post('/', passport.authenticate('jwt', { session: false }), controller.createWithRecipient)
 

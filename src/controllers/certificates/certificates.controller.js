@@ -50,7 +50,7 @@ const createWithRecipient = async (req, res) => {
         config.nodemailer.auth.user,
         email,
         `[${config.applicationName}] You have a new certificate`,
-        `A new certificate has been issued to you. Click on this link to manage it: ${config.validateUrl}${permanentToken}. This will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.`,
+        `A new certificate has been issued to you. Click on this link to manage it: ${config.permanentTokenLoginUrl}${permanentToken} This will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.`,
         '<p>TODO html</p>'
       )
       return res.status(200).json({
