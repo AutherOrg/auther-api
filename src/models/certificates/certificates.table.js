@@ -2,6 +2,12 @@ const Sequelize = require('sequelize')
 const constants = require('./certificates.constants')
 
 module.exports = {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER
+  },
   status: {
     type: Sequelize.INTEGER,
     allowNull: false,

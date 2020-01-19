@@ -32,7 +32,8 @@ const authenticate = async (req, res) => {
       { expiresIn: '24h' }
     )
     return res.status(200).json({
-      bearerToken: token
+      user: existingUser,
+      token
     })
   } catch (e) {
     return res.status(500).json({ error: e.message })

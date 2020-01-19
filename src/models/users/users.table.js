@@ -2,6 +2,12 @@ const Sequelize = require('sequelize')
 const constants = require('./users.constants')
 
 module.exports = {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,
