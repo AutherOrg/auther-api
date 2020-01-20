@@ -4,6 +4,7 @@
   "description": "API to host and share online Blockcerts certificates",
   "main": "src/server.js",
   "repository": "https://github.com/openblockcerts/openblockcerts-api",
+  "homepage": "https://www.openblockcerts.com/openblockcerts-api",
   "author": "Guillaume Duveau <guillaume.duveau@gmail.com>",
   "license": "MIT",
   "private": false,

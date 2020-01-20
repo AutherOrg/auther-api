@@ -1,6 +1,6 @@
 # OpenBlockcerts API
 
-API to host and share online [Blockcerts](https://www.blockcerts.org) certificates.
+API to host and share online Blockcerts certificates.
 
 ## Introduction
 
@@ -43,11 +43,11 @@ To sign certificates, you will need to have Ethereum connectivity in your browse
 
 ## General discussion, installation and configuration help
 
-Please post on the [OpenBlockcerts.org forum](TODO).
++ [OpenBlockcerts.com forum](https://www.openblockcerts.com/forum)
 
 ## Paid technical support, development and commercial services
 
-Paid technical support and commercial services are available on [OpenBlockcerts.com](TODO).
++ [OpenBlockcerts.com services](https://www.openblockcerts.com/services).
 
 ## Development
 
