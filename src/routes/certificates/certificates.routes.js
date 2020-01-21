@@ -25,7 +25,7 @@ const routes = passport => {
    * @apiDescription Get all certificiates. For admin: all. For issuer: all the issued certificates. For recipient: all her/his certificates.
    * @apiSuccess {Object[]} certificates Array of certificates (see GetCertificate)
    */
-  router.get('/', passport.authenticate('jwt', { session: false }), controller.getMany)
+  router.get('/', passport.authenticate('jwt', { session: false }), controller.getAll)
 
   /**
    * @api {get} /certificates/:uuid Get a shared certificate.

@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
 
 const config = require('../../config')
@@ -67,12 +68,15 @@ const createWithRecipient = async (req, res) => {
   }
 }
 
-const getMany = async (req, res) => {
+const getAll = async (req, res) => {
   try {
     const { user } = req
     const where = {}
     if (![userConstants.role.ADMIN].includes(user.role)) {
-      where.user_id = user.id
+      where[Op.or] = [
+        { recipientId: user.id },
+        { issuerId: user.id }
+      ]
     }
     const certificates = await Certificates.findAll({
       where
@@ -102,6 +106,6 @@ const getOne = async (req, res) => {
 
 module.exports = {
   createWithRecipient,
-  getMany,
+  getAll,
   getOne
 }
