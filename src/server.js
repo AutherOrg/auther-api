@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 })
 
 app.use(bodyParser.json({
-  limit: '1mb'
+  limit: '5mb'
 }))
 app.use(bodyParser.urlencoded({
   extended: false

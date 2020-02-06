@@ -9,8 +9,7 @@ const send = async (from, to, subject, text, html) => {
       from,
       to,
       subject,
-      text,
-      html
+      text
     })
     return result
   } catch (e) {
