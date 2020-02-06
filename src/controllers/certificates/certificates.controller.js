@@ -135,10 +135,15 @@ const getOne = async (req, res) => {
 
 const getShared = async (req, res) => {
   try {
-    const certificate = await Certificates.find({
+    const certificate = await Certificates.findOne({
       where: {
         uuid: req.params.uuid
-      }
+      },
+      attributes: [
+        'status',
+        'uuid',
+        'json'
+      ]
     })
     if (certificate.status === certificatesConstants.status.SHARED) {
       return res.status(200).json(certificate)
