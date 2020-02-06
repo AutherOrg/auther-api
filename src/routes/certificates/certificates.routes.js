@@ -28,7 +28,18 @@ const routes = passport => {
   router.get('/', passport.authenticate('jwt', { session: false }), controller.getAll)
 
   /**
-   * @api {get} /certificates/:uuid Get a shared certificate.
+   * @api {get} /certificates/:id Get a certificate.
+   * @apiVersion 1.0.0
+   * @apiName GetCertificate
+   * @apiGroup Certificates
+   * @apiPermission admin, issuer, recipient
+   * @apiDescription Get a certificate by its ID.
+   * @apiSuccess {Object} certificate Certificate (see https://github.com/blockchain-certificates/cert-schema)
+   */
+  router.get('/:id', passport.authenticate('jwt', { session: false }), controller.getOne)
+
+  /**
+   * @api {get} /certificates/shared/:uuid Get a shared certificate.
    * @apiVersion 1.0.0
    * @apiName GetCertificate
    * @apiGroup Certificates
@@ -36,7 +47,7 @@ const routes = passport => {
    * @apiDescription Get a certificate by its UUID and only if it is shared.
    * @apiSuccess {Object} certificate Certificate (see https://github.com/blockchain-certificates/cert-schema)
    */
-  router.get('/:uuid', controller.getOne)
+  router.get('/shared/:uuid', controller.getShared)
 
   return router
 }

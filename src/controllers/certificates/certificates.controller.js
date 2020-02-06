@@ -89,6 +89,31 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
   try {
+    const { user, params } = req
+    const { id } = params
+    if (![userConstants.role.ADMIN, userConstants.role.ISSUER, userConstants.role.RECIPIENT].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const where = {
+      id
+    }
+    if (![userConstants.role.ADMIN].includes(user.role)) {
+      where[Op.or] = [
+        { recipientId: user.id },
+        { issuerId: user.id }
+      ]
+    }
+    const certificate = await Certificates.findOne({
+      where
+    })
+    return res.status(200).json(certificate)
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const getShared = async (req, res) => {
+  try {
     const certificate = await Certificates.find({
       where: {
         uuid: req.params.uuid
@@ -107,5 +132,6 @@ const getOne = async (req, res) => {
 module.exports = {
   createWithRecipient,
   getAll,
-  getOne
+  getOne,
+  getShared
 }
