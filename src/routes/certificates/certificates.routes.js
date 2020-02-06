@@ -39,6 +39,28 @@ const routes = passport => {
   router.get('/:id', passport.authenticate('jwt', { session: false }), controller.getOne)
 
   /**
+   * @api {patch} /certificates/:id Update a certificate.
+   * @apiVersion 1.0.0
+   * @apiName PatchCertificate
+   * @apiGroup Certificates
+   * @apiPermission recipient
+   * @apiDescription Update a certificate.
+   * @apiSuccess {Object} certificate Certificate (see https://github.com/blockchain-certificates/cert-schema)
+   */
+  router.patch('/:id', passport.authenticate('jwt', { session: false }), controller.update)
+
+  /**
+   * @api {delete} /certificates/:id Delete a certificate.
+   * @apiVersion 1.0.0
+   * @apiName DeleteCertificate
+   * @apiGroup Certificates
+   * @apiPermission recipient
+   * @apiDescription Delete a certificate.
+   * @apiSuccess {Number} rows
+   */
+  router.delete('/:id', passport.authenticate('jwt', { session: false }), controller.destroy)
+
+  /**
    * @api {get} /certificates/shared/:uuid Get a shared certificate.
    * @apiVersion 1.0.0
    * @apiName GetCertificate

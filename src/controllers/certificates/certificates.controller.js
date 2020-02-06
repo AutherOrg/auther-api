@@ -68,6 +68,27 @@ const createWithRecipient = async (req, res) => {
   }
 }
 
+const destroy = async (req, res) => {
+  try {
+    const { params, user } = req
+    if (![userConstants.role.RECIPIENT].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const { id } = params
+    const result = await Certificates.destroy(
+      {
+        where: {
+          id,
+          recipientId: user.id
+        }
+      }
+    )
+    return res.status(200).json(result)
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
 const getAll = async (req, res) => {
   try {
     const { user } = req
@@ -129,9 +150,43 @@ const getShared = async (req, res) => {
   }
 }
 
+const update = async (req, res) => {
+  try {
+    const { body, params, user } = req
+    if (![userConstants.role.RECIPIENT].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const isValidInput = inputService.validate('./certificates/certificates.update.input.schema.json', req)
+    if (!isValidInput) {
+      return res.status(400).json({ error: 'Bad request' })
+    }
+    const { status } = body
+    const { id } = params
+    await Certificates.update(
+      { status },
+      {
+        where: {
+          id,
+          recipientId: user.id
+        }
+      }
+    )
+    const updated = await Certificates.findOne({
+      where: {
+        id
+      }
+    })
+    return res.status(200).json(updated)
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
 module.exports = {
   createWithRecipient,
+  destroy,
   getAll,
   getOne,
-  getShared
+  getShared,
+  update
 }
