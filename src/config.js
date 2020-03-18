@@ -26,5 +26,6 @@ module.exports = {
   },
   permanentTokenLoginUrl: process.env.PERMANENT_TOKEN_LOGIN_URL,
   validatePasswordUrl: process.env.VALIDATE_PASSWORD_URL,
-  applicationName: process.env.APPLICATION_NAME
+  applicationName: process.env.APPLICATION_NAME,
+  debug: process.env.DEBUG
 }

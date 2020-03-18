@@ -13,6 +13,9 @@ const send = async (from, to, subject, text, html, attachments) => {
       html,
       attachments
     })
+    if (config.debug === 'true') {
+      console.log(result)
+    }
     return result
   } catch (e) {
     console.error(e.message)
