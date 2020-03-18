@@ -11,8 +11,5 @@ test('Send email', async () => {
     '',
     ''
   )
-  expect(result).toHaveProperty('accepted')
-  expect(result.accepted).toHaveLength(1)
-  expect(result).toHaveProperty('rejected')
-  expect(result.rejected).toHaveLength(0)
+  expect(result).not.toHaveProperty('error')
 })
