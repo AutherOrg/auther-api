@@ -22,9 +22,6 @@ module.exports = {
     auth: {
       user: process.env.NODEMAILER_USER,
       pass: process.env.NODEMAILER_PASS
-    },
-    tls: {
-      rejectUnauthorized: false
     }
   },
   permanentTokenLoginUrl: process.env.PERMANENT_TOKEN_LOGIN_URL,
