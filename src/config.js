@@ -22,7 +22,9 @@ module.exports = {
     auth: {
       user: process.env.NODEMAILER_USER,
       pass: process.env.NODEMAILER_PASS
-    }
+    },
+    debug: true,
+    logger: true
   },
   permanentTokenLoginUrl: process.env.PERMANENT_TOKEN_LOGIN_URL,
   validatePasswordUrl: process.env.VALIDATE_PASSWORD_URL,
