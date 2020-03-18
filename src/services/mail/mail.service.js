@@ -4,7 +4,12 @@ const config = require('../../config')
 
 const send = async (from, to, subject, text, html, attachments) => {
   try {
-    const transporter = nodemailer.createTransport(config.nodemailer)
+    // const transporter = nodemailer.createTransport(config.nodemailer)
+    const transporter = nodemailer.createTransport({
+      sendmail: true,
+      newline: 'unix',
+      path: '/usr/sbin/sendmail'
+    })
     const result = await transporter.sendMail({
       from,
       to,
