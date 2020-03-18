@@ -15,6 +15,7 @@ const send = async (from, to, subject, text, html, attachments) => {
     })
     return result
   } catch (e) {
+    console.error(e.message)
     return {
       error: e.message
     }
