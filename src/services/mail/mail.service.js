@@ -3,25 +3,24 @@ const nodemailer = require('nodemailer')
 const config = require('../../config')
 
 const send = async (from, to, subject, text, html, attachments) => {
-  const message = {
-    from,
-    to,
-    subject,
-    text,
-    html,
-    attachments
-  }
   try {
     const transporter = nodemailer.createTransport(config.nodemailer)
-    const result = await transporter.sendMail(message)
+    const result = await transporter.sendMail({
+      from,
+      to,
+      subject,
+      text,
+      html,
+      attachments
+    })
     if (config.debug === 'true') {
-      console.log(result)
+      console.log(to, subject, text)
     }
     return result
   } catch (e) {
     console.error(e.message)
     if (config.debug === 'true') {
-      console.log(message)
+      console.log(to, subject, text)
     }
     return {
       error: e.message
