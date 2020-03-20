@@ -17,17 +17,20 @@ module.exports = {
     secret: process.env.PASSPORT_SECRET
   },
   nodemailer: {
-    host: process.env.NODEMAILER_HOST,
-    port: process.env.NODEMAILER_PORT,
-    auth: {
-      user: process.env.NODEMAILER_USER,
-      pass: process.env.NODEMAILER_PASS
-    },
-    debug: true,
-    logger: true
+    transport: process.env.NODEMAILER_TRANSPORT,
+    from: process.env.NODEMAILER_FROM,
+    smtp: {
+      host: process.env.NODEMAILER_SMTP_HOST,
+      port: process.env.NODEMAILER_SMTP_PORT,
+      auth: {
+        user: process.env.NODEMAILER_SMTP_USER,
+        pass: process.env.NODEMAILER_SMTP_PASS
+      }
+    }
   },
   permanentTokenLoginUrl: process.env.PERMANENT_TOKEN_LOGIN_URL,
   validatePasswordUrl: process.env.VALIDATE_PASSWORD_URL,
   applicationName: process.env.APPLICATION_NAME,
+  validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true',
   debug: process.env.DEBUG
 }

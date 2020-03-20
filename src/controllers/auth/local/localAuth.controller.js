@@ -86,7 +86,7 @@ const setPassword = async (req, res) => {
     const { email, password } = body
     const passwordToken = jsonwebtoken.sign({ email, password }, config.passport.secret, { expiresIn: '1h' })
     const sendMailResult = await mailService.send(
-      config.nodemailer.auth.user,
+      config.nodemailer.from,
       email,
       `[${config.applicationName}] Validate your new password`,
       `Please click on this link to validate your new password: ${config.validatePasswordUrl}${passwordToken}`,

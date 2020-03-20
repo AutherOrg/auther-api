@@ -21,7 +21,7 @@ const createWithRecipient = async (req, res) => {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { certificate } = body
-    const isValid = await blockcertsSchemaService.validate(certificate)
+    const isValid = config.validateCertificates ? await blockcertsSchemaService.validate(certificate) : true
     if (isValid) {
       const email = certificate.recipient.identity.toLowerCase()
       // Sign a permanent token.
@@ -48,7 +48,7 @@ const createWithRecipient = async (req, res) => {
       })
       // Notify recipient.
       const sendMailResult = await mailService.send(
-        config.nodemailer.auth.user,
+        config.nodemailer.from,
         email,
         `[${config.applicationName}] You have a new certificate`,
         `A new certificate has been issued to you. Click on this link to manage it: ${config.permanentTokenLoginUrl}${permanentToken} This will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.`,
