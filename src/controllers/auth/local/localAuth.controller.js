@@ -90,7 +90,7 @@ const setPassword = async (req, res) => {
       email,
       `[${config.applicationName}] Validate your new password`,
       `Please click on this link to validate your new password: ${config.validatePasswordUrl}${passwordToken}`,
-      '<p>TODO html</p>'
+      ''
     )
     return res.status(200).json({
       passwordToken,
