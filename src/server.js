@@ -11,7 +11,10 @@ const app = express()
 
 app.enable('trust proxy')
 
-app.use(morgan('short'))
+morgan.token('user-id', function (req, res) {
+  return req.user ? req.user.id : '-'
+})
+app.use(morgan(':remote-addr :user-id :method :url HTTP/:http-version :status :response-time'))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
