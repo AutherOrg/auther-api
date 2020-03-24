@@ -18,15 +18,10 @@ const send = async (from, to, subject, text, html, attachments) => {
       html,
       attachments
     })
-    if (config.debug === 'true') {
-      console.log(to, subject, text)
-    }
+    console.log('sendMail', to, text, 'success')
     return result
   } catch (e) {
-    if (config.debug === 'true') {
-      console.error(e.message)
-      console.log(to, subject, text)
-    }
+    console.error('sendMail', to, text, e.message)
     return {
       error: e.message
     }
