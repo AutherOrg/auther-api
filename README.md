@@ -46,7 +46,7 @@ yarn start
 You can manage the application service as you want. Here is a short example with [PM2](https://pm2.keymetrics.io/):
 
 + Install PM2 globally: `yarn global add pm2`
-+ Start a PM2 app: `pm2 start src/server.js`+ Stop the PM2 app: `pm2 stop 0`
++ Start a PM2 app: `pm2 start src/server.js`
 + Tail the PM2 logs: `pm2 logs`
 + Monitor the PM2 logs : `pm2 monitor`
 + Flush the PM2 logs: `pm2 flush`
