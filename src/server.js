@@ -23,8 +23,6 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(passport.initialize())
-
-// Hook Passport strategies.
 hookJwtStrategy(passport)
 
 app.get('/', (req, res) => {
