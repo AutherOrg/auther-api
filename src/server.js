@@ -9,6 +9,8 @@ const routes = require('./routes')
 
 const app = express()
 
+app.enable('trust proxy')
+
 app.use(morgan('short'))
 
 app.use((req, res, next) => {
