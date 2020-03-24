@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const passport = require('passport')
 const bodyParser = require('body-parser')
 
@@ -7,6 +8,8 @@ const hookJwtStrategy = require('./services/passport/jwtStrategy.service')
 const routes = require('./routes')
 
 const app = express()
+
+app.use(morgan('short'))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
