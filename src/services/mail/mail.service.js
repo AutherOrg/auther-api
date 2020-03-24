@@ -18,10 +18,10 @@ const send = async (from, to, subject, text, html, attachments) => {
       html,
       attachments
     })
-    console.log('sendMail', to, text, 'success')
+    console.log(to, text, 'success')
     return result
   } catch (e) {
-    console.error('sendMail', to, text, e.message)
+    console.error(to, text, e.message)
     return {
       error: e.message
     }

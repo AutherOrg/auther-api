@@ -10,10 +10,12 @@ This project is purely a backend server. It's intended to be best used with the 
 
 ## Requirements
 
-+ Node.js (this project is developed with Node.js version 13 but many older versions should work).
++ Node.js (this project is developed with Node.js version 13 but many older versions could work).
 + A MySql or MariaDb database
 
 ## Installation
+
+### Development mode
 
 ````
 yarn install
@@ -37,9 +39,79 @@ Start the server (development mode):
 yarn start
 ````
 
-## Sign certificates
+### Production mode
 
-To sign certificates, you will need to have Ethereum connectivity in your browser. You can for instance install the [Metamask](https://metamask.io/) extension (Firefox + Chrome). Also, you will need to have a little bit of Ether. On the Ethereum testnet Ropsten, you can have some for free. On Ethereum Mainnet, on which you should issue real certificates, it won't even cost $0.01 to issue a batch of up to thousands certificates.
+#### PM2
+
+You can manage the application service as you want. Here is a short example with [PM2](https://pm2.keymetrics.io/):
+
++ Install PM2 globally: `yarn global add pm2`
++ Start a PM2 app: `pm2 start src/server.js`+ Stop the PM2 app: `pm2 stop 0`
++ Tail the PM2 logs: `pm2 logs`
++ Monitor the PM2 logs : `pm2 monitor`
++ Flush the PM2 logs: `pm2 flush`
+
+By default, the logs are in `$HOME/.pm2/logs/`.
+
+##### Rotate & compress logs with PM2
+
+To rotate & compress logs with PM2 you can use [PM2 log-rotate](https://github.com/keymetrics/pm2-logrotate): `pm2 install pm2-logrotate`
+
+For instance to use the default settings and compress the rotated files: `pm2 set pm2-logrotate:compress true`
+
+#### Nginx proxy
+
+You can either directly expose the API to the outside on the port SERVER_PORT defined in .env.
+
+Or you can use a Nginx proxy and forward IPs, for instance (without HTTPS but it's of course advised in prod):
+
+````
+server {
+  listen *:80;
+  server_name api.openblockcerts.com;
+  location / {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    #proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Host $remote_addr;
+    proxy_pass http://127.0.0.1:4000/;
+    client_max_body_size 5m;
+  }
+}
+````
+
+... where `4000` in `proxy_pass http://127.0.0.1:4000/` is SERVER_PORT defined in .env.
+
+## Logs
+
+There are 4 kinds of logs:
+
+### Server start
+
+This is just a message when starting the server, specifying on which port it's running.
+
+### HTTP requests
+
+All HTTP requests are logged by [Morgan](https://github.com/expressjs/morgan) with this custom format:
+
+`':remote-addr :user-id :method :url HTTP/:http-version :status :response-time'`
+
+where `:user-id` is a custom token resolving to `-` for unauthenticated requests and to the user ID in the database for authenticated users (example: `123`).
+
+### Database queries
+
+All database queries are logged by default by [Sequelize](https://sequelize.org/), the ORM used in this project.
+
+### Sent emails
+
+All the emails sent by the server are logged with the format:
+
+`to, text, result` where:
+
++ to is the recipient email address
++ text is the message in text format
++ result is either success or an error message
 
 ## General discussion, installation and configuration help
 
