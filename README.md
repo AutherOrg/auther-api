@@ -25,12 +25,12 @@ cp src/seeders/1_users.seed.js.example src/seeders/1_users.seed.js
 
 *If you don't have yarn, you can use npm instead.*
 
-Edit .env to set your credentials and src/seeders/1_users.seed.js to set the administrator account.
+Edit .env to set your credentials and src/seeders/1_users.seed.js to set the administrator account. For PASSPORT_SECRET you can use this generator ofr instance: https://codepen.io/corenominal/pen/rxOmMJ
 
 Init the database:
 
 ````
-yarn set
+yarn initdb
 ````
 
 Start the server (development mode):
