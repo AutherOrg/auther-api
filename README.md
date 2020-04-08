@@ -11,7 +11,7 @@ This project is purely a backend server. It's intended to be best used with the 
 ## Requirements
 
 + Node.js (version >= 10, version 13 prefered).
-+ A MySql or MariaDb database
++ A database (MySql >= 5.7.8 or MariaDb >= 10.2.7)
 
 ## Installation
 
