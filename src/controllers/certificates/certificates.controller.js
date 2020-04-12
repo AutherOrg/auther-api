@@ -51,7 +51,7 @@ const createWithRecipient = async (req, res) => {
         config.nodemailer.from,
         email,
         `[${config.applicationName}] You have a new certificate`,
-        `A new certificate has been issued to you. Click on this link to manage it: ${config.permanentTokenLoginUrl}${permanentToken} This will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.`,
+        `Hello,\r\n\r\nA new certificate has been issued to you.\r\n\r\nClick on this link to manage it:\r\n${config.permanentTokenLoginUrl}${permanentToken}\r\n\r\nThis will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.\r\n\r\nThe ${config.applicationName} team.`,
         '', [{
           filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.json`,
           content: JSON.stringify(createdCertificate.json)

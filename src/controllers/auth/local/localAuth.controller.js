@@ -89,7 +89,7 @@ const setPassword = async (req, res) => {
       config.nodemailer.from,
       email,
       `[${config.applicationName}] Validate your new password`,
-      `Please click on this link to validate your new password: ${config.validatePasswordUrl}${passwordToken}`,
+      `Hello,\r\n\r\nPlease click on this link to validate your new password:\r\n\${config.validatePasswordUrl}${passwordToken}\r\n\r\nThe ${config.applicationName} team.`,
       ''
     )
     return res.status(200).json({
