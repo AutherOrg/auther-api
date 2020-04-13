@@ -99,12 +99,13 @@ const destroy = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const { user } = req
+    const { query, user } = req
     const where = {}
-    if (![
-      userConstants.role.ADMIN,
-      userConstants.role.MANAGER
-    ].includes(user.role)) {
+    if ([userConstants.role.ADMIN, userConstants.role.MANAGER].includes(user.role)) {
+      if (query.onlyMine) {
+        where.recipientId = user.id
+      }
+    } else {
       where[Op.or] = [
         { recipientId: user.id },
         { issuerId: user.id }
@@ -136,14 +137,6 @@ const getOne = async (req, res) => {
   try {
     const { user, params } = req
     const { id } = params
-    if (![
-      userConstants.role.ADMIN,
-      userConstants.role.MANAGER,
-      userConstants.role.ISSUER,
-      userConstants.role.RECIPIENT
-    ].includes(user.role)) {
-      return res.status(403).json({ error: 'Unauthorized' })
-    }
     const where = {
       id
     }
@@ -190,9 +183,6 @@ const getShared = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { body, params, user } = req
-    if (![userConstants.role.RECIPIENT].includes(user.role)) {
-      return res.status(403).json({ error: 'Unauthorized' })
-    }
     const isValidInput = inputService.validate('./certificates/certificates.update.input.schema.json', req)
     if (!isValidInput) {
       return res.status(400).json({ error: 'Bad request' })
