@@ -18,10 +18,10 @@ const send = async (from, to, subject, text, html, attachments) => {
       html,
       attachments
     })
-    console.log(to, text, 'success')
+    console.log(to, subject, 'success')
     return result
   } catch (e) {
-    console.error(to, text, e.message)
+    console.error(to, subject, e.message)
     return {
       error: e.message
     }

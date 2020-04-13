@@ -13,7 +13,11 @@ const mailService = require('../../services/mail/mail.service')
 const createWithRecipient = async (req, res) => {
   try {
     const { user, body } = req
-    if (![userConstants.role.ADMIN, userConstants.role.ISSUER].includes(user.role)) {
+    if (![
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER,
+      userConstants.role.ISSUER
+    ].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
     const isValidInput = inputService.validate('./certificates/certificates.createWithRecipient.input.schema.json', req)
@@ -97,14 +101,30 @@ const getAll = async (req, res) => {
   try {
     const { user } = req
     const where = {}
-    if (![userConstants.role.ADMIN].includes(user.role)) {
+    if (![
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER
+    ].includes(user.role)) {
       where[Op.or] = [
         { recipientId: user.id },
         { issuerId: user.id }
       ]
     }
     const certificates = await Certificates.findAll({
-      where
+      where,
+      order: [
+        ['id', 'DESC']
+      ],
+      include: [
+        {
+          model: Users,
+          as: 'Recipient'
+        },
+        {
+          model: Users,
+          as: 'Issuer'
+        }
+      ]
     })
     return res.status(200).json(certificates)
   } catch (e) {
@@ -116,13 +136,21 @@ const getOne = async (req, res) => {
   try {
     const { user, params } = req
     const { id } = params
-    if (![userConstants.role.ADMIN, userConstants.role.ISSUER, userConstants.role.RECIPIENT].includes(user.role)) {
+    if (![
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER,
+      userConstants.role.ISSUER,
+      userConstants.role.RECIPIENT
+    ].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
     const where = {
       id
     }
-    if (![userConstants.role.ADMIN].includes(user.role)) {
+    if (![
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER
+    ].includes(user.role)) {
       where[Op.or] = [
         { recipientId: user.id },
         { issuerId: user.id }

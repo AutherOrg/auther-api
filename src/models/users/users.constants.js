@@ -1,9 +1,10 @@
 module.exports = {
   role: {
     ANONYMOUS: 0,
-    ADMIN: 1,
-    ISSUER: 2,
-    RECIPIENT: 3
+    RECIPIENT: 1,
+    ADMIN: 2,
+    MANAGER: 3,
+    ISSUER: 4
   },
   status: {
     INACTIVE: 0,

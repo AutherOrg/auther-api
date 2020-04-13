@@ -43,14 +43,24 @@ const create = async (req, res) => {
 }
 
 const getMany = async (req, res) => {
-  const { user } = req
-  const where = {}
+  const { query, user } = req
   if (![userConstants.role.ADMIN].includes(user.role)) {
-    where.id = user.id
+    return res.status(403).json({ error: 'Unauthorized' })
+  }
+  const where = {}
+  if (query.withoutRecipients) {
+    where.role = [
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER,
+      userConstants.role.ISSUER
+    ]
   }
   try {
     Users.findAll({
-      where
+      where,
+      order: [
+        ['id', 'DESC']
+      ]
     }).then(users => {
       res.status(200).json(users)
     })
