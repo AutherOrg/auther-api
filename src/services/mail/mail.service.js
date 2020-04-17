@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 const config = require('../../config')
 
-const send = async (from, to, subject, text, html, attachments) => {
+const send = async (to, subject, text, html, attachments) => {
   try {
     const transport = config.nodemailer.transport === 'smtp' ? config.nodemailer.smtp : {
       sendmail: true,
@@ -11,7 +11,7 @@ const send = async (from, to, subject, text, html, attachments) => {
     }
     const transporter = nodemailer.createTransport(transport)
     const result = await transporter.sendMail({
-      from,
+      from: config.nodemailer.from,
       to,
       subject,
       text,
