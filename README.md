@@ -1,12 +1,12 @@
-# OpenBlockcerts API
+# Auther API
 
-API to host and share online Blockcerts certificates.
+Auther API to host and share online Blockcerts certificates.
 
 ## Introduction
 
-**OpenBlockcerts API** is an opensource API to host and share online Blockcerts certificates.
+**Auther-API** is an opensource API to host and share online Blockcerts certificates.
 
-This project is purely a backend server. It's intended to be best used with the [OpenBlockcerts client](https://github.com/openblockcerts/openblockcerts-client) project.
+This project is purely a backend server. It's intended to be best used with the [Auther client](https://github.com/AutherOrg/auther-client) project.
 
 ## Requirements
 
@@ -68,7 +68,7 @@ Or you can use a Nginx proxy and forward IPs, for instance (without HTTPS but it
 ````
 server {
   listen *:80;
-  server_name api.openblockcerts.com;
+  server_name api.auther.com;
   location / {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -115,11 +115,11 @@ All the emails sent by the server are logged with the format:
 
 ## General discussion, installation and configuration help
 
-+ [OpenBlockcerts.com forum](https://www.openblockcerts.com/forum)
++ [Auther.org forum](https://auther.org/forum)
 
 ## Paid technical support, development and commercial services
 
-+ [OpenBlockcerts.com services](https://www.openblockcerts.com/services).
++ [Contact Auther's original author](https://guillaumeduveau.com/en/contact)
 
 ## Development
 

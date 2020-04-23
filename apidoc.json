@@ -1,6 +1,6 @@
 {
-  "name": "openblockcerts-api",
+  "name": "auther-api",
   "version": "1.0.0",
-  "title": "OpenBlockcerts API documentation",
-  "description": "For more information: https://www.openblockcerts.com/openblockcerts-api"
+  "title": "Auther-API documentation",
+  "description": "For more information: https://auther.org/documentation/api"
 }

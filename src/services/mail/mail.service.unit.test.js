@@ -3,7 +3,7 @@ const service = require('./mail.service')
 
 test('Send email', async () => {
   const result = await service.send(
-    'guillaume.duveau+openblockcerts-api-recipient@gmail.com',
+    'guillaume.duveau+auther-api-recipient@gmail.com',
     'Email test',
     'How are you?',
     '',

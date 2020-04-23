@@ -34,7 +34,7 @@ app.use(passport.initialize())
 hookJwtStrategy(passport)
 
 app.get('/', (req, res) => {
-  res.send('OpenBlockcerts API documentation: https://openblockcerts.github.io/openblockcerts-api')
+  res.send('Auther API documentation: https://apidoc.auther.org')
 })
 
 app.use(routes(passport))
