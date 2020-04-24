@@ -119,7 +119,7 @@ All the emails sent by the server are logged with the format:
 
 ## Paid technical support, development and commercial services
 
-+ [Contact Auther's original author](https://guillaumeduveau.com/en/contact)
++ You can [contact Auther's original author](https://guillaumeduveau.com/en/contact)
 
 ## Development
 
