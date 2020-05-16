@@ -31,7 +31,7 @@ const authenticate = async (req, res) => {
     const token = jsonwebtoken.sign(
       { id: existingUser.id },
       config.passport.secret,
-      { expiresIn: '24h' }
+      { expiresIn: '30 days' }
     )
     return res.status(200).json({
       user: existingUser,
@@ -42,34 +42,19 @@ const authenticate = async (req, res) => {
   }
 }
 
-const authenticateFromPermanentToken = async (req, res) => {
+const get = async (req, res) => {
   try {
-    const isValidInput = inputService.validate('./auth/local/local.auth.authenticateFromPermanentToken.input.schema.json', req)
-    if (!isValidInput) {
-      return res.status(400).json({ error: 'Bad request' })
-    }
-    const { body } = req
-    const { permanentToken } = body
-    const decodedToken = jsonwebtoken.decode(permanentToken)
-    if (!decodedToken) {
-      return res.status(400).json({ error: 'Invalid permanent token' })
-    }
-    const existingUser = await Users.findOne({
+    const { user } = req
+    const authenticatedUser = await Users.findOne({
       where: {
-        email: decodedToken.email
+        id: user.id
       }
     })
-    if (!existingUser) {
+    if (!authenticatedUser) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    const token = jsonwebtoken.sign(
-      { id: existingUser.id },
-      config.passport.secret,
-      { expiresIn: '24h' }
-    )
     return res.status(200).json({
-      user: existingUser,
-      token
+      user: authenticatedUser
     })
   } catch (e) {
     return res.status(500).json({ error: e.message })
@@ -78,69 +63,86 @@ const authenticateFromPermanentToken = async (req, res) => {
 
 const setPassword = async (req, res) => {
   try {
+    const { body, user } = req
     const isValidInput = inputService.validate('./auth/local/local.auth.setPassword.input.schema.json', req)
     if (!isValidInput) {
       return res.status(400).json({ error: 'Bad request' })
     }
-    const { body } = req
-    const { email, password } = body
-    const passwordToken = jsonwebtoken.sign({ email, password }, config.passport.secret, { expiresIn: '1h' })
-    const sendMailResult = await mailService.send(
-      email,
-      `[${config.applicationName}] Validate your new password`,
-      `Hello,\r\n\r\nPlease click on this link to validate your new password:\r\n${config.validatePasswordUrl}${passwordToken}\r\n\r\nThe ${config.applicationName} team.`,
-      ''
-    )
+    const { password } = body
+    const passwordHash = await passwordService.hash(password)
+    const data = {
+      status: usersConstants.status.ACTIVE,
+      passwordHash
+    }
+    Users.update(data, {
+      where: {
+        id: user.id
+      }
+    })
     return res.status(200).json({
-      passwordToken,
-      sendMailResult
+      user
     })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
 }
 
-const validatePassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   try {
-    const isValidInput = inputService.validate('./auth/local/local.auth.validatePassword.input.schema.json', req)
+    const isValidInput = inputService.validate('./auth/local/local.auth.resetPassword.input.schema.json', req)
     if (!isValidInput) {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { body } = req
-    const { passwordToken } = body
-    const decodedToken = jsonwebtoken.decode(passwordToken)
-    if (!decodedToken) {
-      return res.status(400).json({ error: 'Invalid password token' })
-    }
+    const { email } = body
     const existingUser = await Users.findOne({
       where: {
-        email: decodedToken.email
+        email
       }
     })
-    if (!existingUser) {
+    if (existingUser) {
+      const resetPasswordToken = jsonwebtoken.sign({ id: existingUser.id }, config.passport.secret, { expiresIn: '1h' })
+      const sendMailResult = await mailService.send(
+        email,
+        `[${config.applicationName}] Reset password`,
+        `Hello,\r\n\r\nPlease click on this link to set a new password:\r\n${config.resetPasswordProcessUrl}${resetPasswordToken}\r\n\r\nThe ${config.applicationName} team.`,
+        ''
+      )
+      return res.status(200).json({
+        sendMailResult
+      })
+    } else {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    const passwordHash = await passwordService.hash(decodedToken.password)
-    const data = {
-      passwordHash
-    }
-    if (existingUser.status === usersConstants.status.INACTIVE) {
-      data.status = usersConstants.status.ACTIVE
-    }
-    Users.update(data, {
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const resetPasswordProcess = async (req, res) => {
+  try {
+    const { user } = req
+    const existingUser = await Users.findOne({
       where: {
-        id: existingUser.id
+        id: user.id
       }
     })
-    const token = jsonwebtoken.sign(
-      { id: existingUser.id },
-      config.passport.secret,
-      { expiresIn: '24h' }
-    )
-    return res.status(200).json({
-      user: existingUser,
-      token
-    })
+    if (existingUser) {
+      const data = {
+        status: usersConstants.status.INACTIVE,
+        passwordHash: ''
+      }
+      Users.update(data, {
+        where: {
+          id: user.id
+        }
+      })
+      return res.status(200).json({
+        user
+      })
+    } else {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
@@ -148,7 +150,8 @@ const validatePassword = async (req, res) => {
 
 module.exports = {
   authenticate,
-  authenticateFromPermanentToken,
-  setPassword,
-  validatePassword
+  get,
+  resetPassword,
+  resetPasswordProcess,
+  setPassword
 }

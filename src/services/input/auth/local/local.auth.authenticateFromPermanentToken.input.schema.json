@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "permanentToken": {
-      "type": "string"
-    }
-  },
-  "additionalProperties": false
-}

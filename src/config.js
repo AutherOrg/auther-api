@@ -28,8 +28,8 @@ module.exports = {
       }
     }
   },
-  permanentTokenLoginUrl: process.env.PERMANENT_TOKEN_LOGIN_URL,
-  validatePasswordUrl: process.env.VALIDATE_PASSWORD_URL,
+  loginFromTokenUrl: process.env.LOGIN_FROM_TOKEN_URL,
+  resetPasswordProcessUrl: process.env.RESET_PASSWORD_PROCESS_URL,
   applicationName: process.env.APPLICATION_NAME,
   validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true'
 }

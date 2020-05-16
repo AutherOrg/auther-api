@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 const controller = require('../../../controllers/auth/local/localAuth.controller')
 
-const routes = () => {
+const routes = passport => {
   /**
    * @api {post} /auth/local Authenticate
    * @apiVersion 1.0.0
@@ -19,17 +19,15 @@ const routes = () => {
   router.post('/', controller.authenticate)
 
   /**
-   * @api {post} /auth/local/permanent Authenticate from permanent token
+   * @api {get} /auth/local Get authenticated user
    * @apiVersion 1.0.0
-   * @apiName PostAuthLocalPermanent
+   * @apiName GetAuthLocal
    * @apiGroup Auth
-   * @apiPermission public
-   * @apiDescription Post a permanent token and return a JWT and the user.
-   * @apiParam {String} permanentToken
+   * @apiPermission recipient, admin, manager, issuer
+   * @apiDescription Return the authenticated user.
    * @apiSuccess {Object} user (see GetUser)
-   * @apiSuccess {String} token Json web token
    */
-  router.post('/permanent', controller.authenticateFromPermanentToken)
+  router.get('/', passport.authenticate('jwt', { session: false }), controller.get)
 
   /**
    * @api {post} /auth/local/password/set Set password
@@ -43,20 +41,30 @@ const routes = () => {
    * @apiSuccess {String} passwordToken The token to set the password
    * @apiSuccess {Object} sendMailResult (see https://nodemailer.com/usage/#sending-mail)
    */
-  router.post('/password/set', controller.setPassword)
+  router.post('/password/set', passport.authenticate('jwt', { session: false }), controller.setPassword)
 
   /**
-   * @api {post} /auth/local/password/validate Validate password change
+   * @api {post} /auth/local/password/reset Reset password
    * @apiVersion 1.0.0
-   * @apiName PostAuthLocalPasswordValidate
+   * @apiName PostAuthLocalPasswordReset
    * @apiGroup Auth
    * @apiPermission public
-   * @apiDescription Validate password.
-   * @apiParam {String} passwordToken The token sent by email to set the password.
-   * @apiSuccess {Object} user (see GetUser)
-   * @apiSuccess {String} token Json web token
+   * @apiDescription Send an email to set a new password.
+   * @apiParam {string} email
+   * @apiSuccess {Object} sendMailResult (see https://nodemailer.com/usage/#sending-mail)
    */
-  router.post('/password/validate', controller.validatePassword)
+  router.post('/password/reset', controller.resetPassword)
+
+  /**
+   * @api {get} /auth/local/password/reset Process reset password link
+   * @apiVersion 1.0.0
+   * @apiName GetAuthLocalPasswordReset
+   * @apiGroup Auth
+   * @apiPermission recipient, admin, manager, issuer
+   * @apiDescription Deactivate the user and empty his password.
+   * @apiSuccess {Object} user (see GetUser)
+   */
+  router.get('/password/reset', passport.authenticate('jwt', { session: false }), controller.resetPasswordProcess)
 
   return router
 }

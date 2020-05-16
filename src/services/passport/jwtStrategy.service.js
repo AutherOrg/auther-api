@@ -11,7 +11,7 @@ const hookJwtStrategy = passport => {
     new JwtStrategy({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       jsonWebTokenOptions: {
-        maxAge: '24h'
+        maxAge: '30 days'
       },
       secretOrKey: config.passport.secret
     },

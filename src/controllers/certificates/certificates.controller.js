@@ -28,8 +28,6 @@ const createWithRecipient = async (req, res) => {
     const isValid = config.validateCertificates ? await blockcertsSchemaService.validate(certificate) : true
     if (isValid) {
       const email = certificate.recipient.identity.toLowerCase()
-      // Sign a permanent token.
-      const permanentToken = jsonwebtoken.sign({ email }, config.passport.secret)
       // Find out if the recipient user already exists.
       let recipient = await Users.findOne({
         where: {
@@ -50,11 +48,13 @@ const createWithRecipient = async (req, res) => {
         recipientId: recipient.id,
         issuerId: req.user.id
       })
+      // Sign a token.
+      const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
       // Notify recipient.
       const sendMailResult = await mailService.send(
         email,
         `[${config.applicationName}] You have a new certificate`,
-        `Hello,\r\n\r\nA new certificate has been issued to you.\r\n\r\nClick on this link to manage it:\r\n${config.permanentTokenLoginUrl}${permanentToken}\r\n\r\nThis will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.\r\n\r\nThe ${config.applicationName} team.`,
+        `Hello,\r\n\r\nA new certificate has been issued to you.\r\n\r\nClick on this link to manage it:\r\n${config.loginFromTokenUrl}${token}\r\n\r\nThis will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.\r\n\r\nThe ${config.applicationName} team.`,
         '', [{
           filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.json`,
           content: JSON.stringify(createdCertificate.json)
