@@ -1,3 +1,4 @@
+const config = require('../config')
 const constants = require('../models/users/users.constants')
 const passwordService = require('../services/password/password.service')
 
@@ -16,10 +17,10 @@ async function insert (queryInterface) {
   const data = []
 
   const admin = {
-    email: 'admin@example.com',
+    email: config.admin.email,
     status: constants.status.ACTIVE,
     role: constants.role.ADMIN,
-    passwordHash: await passwordService.hash('wxc123'),
+    passwordHash: await passwordService.hash(config.admin.password),
     createdAt: new Date(),
     updatedAt: new Date()
   }

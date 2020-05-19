@@ -1,17 +1,38 @@
+const Sequelize = require('sequelize')
+
 const db = require('../../services/database/database.service')
-const usersModel = require('../users/users.model')
-const table = require('./certificates.table')
+const constants = require('./certificates.constants')
+const Users = require('../users/users.model')
 
-const certificatesModel = db.define('Certificates', table)
+const Certificates = db.define(
+  'Certificates', {
+    status: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: constants.status.NOT_SHARED
+    },
+    uuid: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false
+    },
+    json: {
+      type: Sequelize.JSON,
+      get (field) {
+        return typeof this.getDataValue(field) === 'string' ? JSON.parse(this.getDataValue(field)) : this.getDataValue(field)
+      }
+    }
+  }
+)
 
-certificatesModel.belongsTo(usersModel, {
+Certificates.belongsTo(Users, {
   foreignKey: 'recipientId',
   as: 'Recipient'
 })
 
-certificatesModel.belongsTo(usersModel, {
-  foreignKey: 'issuerId',
-  as: 'Issuer'
+Certificates.belongsTo(Users, {
+  foreignKey: 'creatorId',
+  as: 'Creator'
 })
 
-module.exports = certificatesModel
+module.exports = Certificates

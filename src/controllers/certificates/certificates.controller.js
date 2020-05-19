@@ -20,8 +20,7 @@ const createWithRecipient = async (req, res) => {
     ].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    const isValidInput = inputService.validate('./certificates/certificates.createWithRecipient.input.schema.json', req)
-    if (!isValidInput) {
+    if (!inputService.validate(`${__dirname}/certificates.createWithRecipient.json`, req)) {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { certificate } = body
@@ -29,11 +28,7 @@ const createWithRecipient = async (req, res) => {
     if (isValid) {
       const email = certificate.recipient.identity.toLowerCase()
       // Find out if the recipient user already exists.
-      let recipient = await Users.findOne({
-        where: {
-          email
-        }
-      })
+      let recipient = await Users.findOne({ where: { email } })
       // Create a new recipient user.
       if (!recipient) {
         recipient = await Users.create({
@@ -46,7 +41,7 @@ const createWithRecipient = async (req, res) => {
       const createdCertificate = await Certificates.create({
         json: certificate,
         recipientId: recipient.id,
-        issuerId: req.user.id
+        creatorId: req.user.id
       })
       // Sign a token.
       const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
@@ -107,7 +102,7 @@ const getAll = async (req, res) => {
     } else {
       where[Op.or] = [
         { recipientId: user.id },
-        { issuerId: user.id }
+        { creatorId: user.id }
       ]
     }
     const certificates = await Certificates.findAll({
@@ -122,7 +117,7 @@ const getAll = async (req, res) => {
         },
         {
           model: Users,
-          as: 'Issuer'
+          as: 'Creator'
         }
       ]
     })
@@ -136,21 +131,17 @@ const getOne = async (req, res) => {
   try {
     const { user, params } = req
     const { id } = params
-    const where = {
-      id
-    }
+    const where = { id }
     if (![
       userConstants.role.ADMIN,
       userConstants.role.MANAGER
     ].includes(user.role)) {
       where[Op.or] = [
         { recipientId: user.id },
-        { issuerId: user.id }
+        { creatorId: user.id }
       ]
     }
-    const certificate = await Certificates.findOne({
-      where
-    })
+    const certificate = await Certificates.findOne({ where })
     return res.status(200).json(certificate)
   } catch (e) {
     return res.status(500).json({ error: e.message })
@@ -182,8 +173,7 @@ const getShared = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { body, params, user } = req
-    const isValidInput = inputService.validate('./certificates/certificates.update.input.schema.json', req)
-    if (!isValidInput) {
+    if (!inputService.validate(`${__dirname}/certificates.update.json`, req)) {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { status } = body
@@ -197,11 +187,7 @@ const update = async (req, res) => {
         }
       }
     )
-    const updated = await Certificates.findOne({
-      where: {
-        id
-      }
-    })
+    const updated = await Certificates.findOne({ where: { id } })
     return res.status(200).json(updated)
   } catch (e) {
     return res.status(500).json({ error: e.message })

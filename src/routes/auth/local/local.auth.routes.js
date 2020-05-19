@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const controller = require('../../../controllers/auth/local/localAuth.controller')
+const controller = require('../../../controllers/auth/local/local.auth.controller')
 
 const routes = passport => {
   /**

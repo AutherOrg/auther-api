@@ -1,31 +1,36 @@
-const constants = require('../models/users/users.constants')
+const constants = require('../models/signatures/signatures.constants')
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable(
-      'Users', {
+      'Signatures', {
         id: {
           type: Sequelize.INTEGER,
           allowNull: false,
           autoIncrement: true,
           primaryKey: true
         },
-        email: {
+        name: {
           type: Sequelize.STRING,
-          unique: true,
-          validate: {
-            isEmail: true
-          }
-        },
-        role: {
-          type: Sequelize.INTEGER,
           allowNull: false,
-          defaultValue: constants.role.RECIPIENT
+          defaultValue: ''
+        },
+        jobTitle: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          defaultValue: ''
         },
         status: {
           type: Sequelize.INTEGER,
           allowNull: false,
-          defaultValue: constants.status.INACTIVE
+          defaultValue: constants.status.ACTIVE
+        },
+        creatorId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users',
+            key: 'id'
+          }
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -35,8 +40,8 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: false
         },
-        passwordHash: {
-          type: Sequelize.STRING,
+        image: {
+          type: Sequelize.TEXT('medium'),
           allowNull: false,
           defaultValue: ''
         }
@@ -44,6 +49,6 @@ module.exports = {
     )
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Users')
+    return queryInterface.dropTable('Signatures')
   }
 }

@@ -1,7 +1,13 @@
 {
   "type": "object",
   "properties": {
-    "password": {
+    "name": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": "string"
+    },
+    "image": {
       "type": "string"
     }
   },

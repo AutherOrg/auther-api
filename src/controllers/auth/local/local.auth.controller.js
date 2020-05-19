@@ -9,13 +9,11 @@ const mailService = require('../../../services/mail/mail.service')
 
 const authenticate = async (req, res) => {
   try {
-    const isValidInput = inputService.validate('./auth/local/local.auth.authenticate.input.schema.json', req)
-    if (!isValidInput) {
+    if (!inputService.validate(`${__dirname}/local.auth.authenticate.json`, req)) {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { body } = req
-    const { user } = body
-    const { email, password } = user
+    const { email, password } = body
     const existingUser = await Users.scope('withPasswordHash').findOne({
       where: {
         email
@@ -33,8 +31,13 @@ const authenticate = async (req, res) => {
       config.passport.secret,
       { expiresIn: '30 days' }
     )
+    const filteredExistingUser = await Users.findOne({
+      where: {
+        email
+      }
+    })
     return res.status(200).json({
-      user: existingUser,
+      user: filteredExistingUser,
       token
     })
   } catch (e) {
@@ -53,35 +56,7 @@ const get = async (req, res) => {
     if (!authenticatedUser) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    return res.status(200).json({
-      user: authenticatedUser
-    })
-  } catch (e) {
-    return res.status(500).json({ error: e.message })
-  }
-}
-
-const setPassword = async (req, res) => {
-  try {
-    const { body, user } = req
-    const isValidInput = inputService.validate('./auth/local/local.auth.setPassword.input.schema.json', req)
-    if (!isValidInput) {
-      return res.status(400).json({ error: 'Bad request' })
-    }
-    const { password } = body
-    const passwordHash = await passwordService.hash(password)
-    const data = {
-      status: usersConstants.status.ACTIVE,
-      passwordHash
-    }
-    Users.update(data, {
-      where: {
-        id: user.id
-      }
-    })
-    return res.status(200).json({
-      user
-    })
+    return res.status(200).json(authenticatedUser)
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
@@ -89,8 +64,7 @@ const setPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
-    const isValidInput = inputService.validate('./auth/local/local.auth.resetPassword.input.schema.json', req)
-    if (!isValidInput) {
+    if (!inputService.validate(`${__dirname}/local.auth.resetPassword.json`, req)) {
       return res.status(400).json({ error: 'Bad request' })
     }
     const { body } = req
@@ -143,6 +117,31 @@ const resetPasswordProcess = async (req, res) => {
     } else {
       return res.status(403).json({ error: 'Unauthorized' })
     }
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const setPassword = async (req, res) => {
+  try {
+    const { body, user } = req
+    if (!inputService.validate(`${__dirname}/local.auth.setPassword.json`, req)) {
+      return res.status(400).json({ error: 'Bad request' })
+    }
+    const { password } = body
+    const passwordHash = await passwordService.hash(password)
+    const data = {
+      status: usersConstants.status.ACTIVE,
+      passwordHash
+    }
+    Users.update(data, {
+      where: {
+        id: user.id
+      }
+    })
+    return res.status(200).json({
+      user
+    })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }

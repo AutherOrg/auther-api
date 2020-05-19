@@ -9,80 +9,63 @@ const create = async (req, res) => {
     if (![userConstants.role.ADMIN].includes(user.role)) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
-    const isValidInput = inputService.validate('./users/users.create.input.schema.json', req)
-    if (!isValidInput) {
+    if (!inputService.validate(`${__dirname}/users.create.json`, req)) {
       return res.status(400).json({ error: 'Bad request' })
     }
-    const { email, password, status, role } = body.user
-    const existingUser = await Users.findOne({
-      where: {
-        email
-      }
-    })
+    const { email, password, status, role } = body
+    const existingUser = await Users.findOne({ where: { email } })
     if (existingUser) {
       return res.status(409).json({ error: 'Resource already exists' })
     }
     const passwordHash = await passwordService.hash(password)
     const data = {
       email,
+      status,
+      role,
       passwordHash
     }
-    if (status) {
-      data.status = status
-    }
-    if (role) {
-      data.role = role
-    }
     const createdUser = await Users.create(data)
-    return res.status(200).json({
-      user: createdUser
-    })
+    return res.status(200).json(createdUser)
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
 }
 
 const getMany = async (req, res) => {
-  const { query, user } = req
-  if (![userConstants.role.ADMIN].includes(user.role)) {
-    return res.status(403).json({ error: 'Unauthorized' })
-  }
-  const where = {}
-  if (query.withoutRecipients) {
-    where.role = [
-      userConstants.role.ADMIN,
-      userConstants.role.MANAGER,
-      userConstants.role.ISSUER
-    ]
-  }
   try {
-    Users.findAll({
+    const { query, user } = req
+    if (![userConstants.role.ADMIN].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const where = {}
+    if (query.withoutRecipients) {
+      where.role = [
+        userConstants.role.ADMIN,
+        userConstants.role.MANAGER,
+        userConstants.role.ISSUER
+      ]
+    }
+    const data = await Users.findAll({
       where,
       order: [
         ['id', 'DESC']
       ]
-    }).then(users => {
-      res.status(200).json(users)
     })
+    res.status(200).json(data)
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
 }
 
 const getOne = async (req, res) => {
-  const { user, params } = req
-  const { id } = params
-  if (![userConstants.role.ADMIN].includes(user.role)) {
-    return res.status(403).json({ error: 'Unauthorized' })
-  }
   try {
-    Users.findOne({
-      where: {
-        id
-      }
-    }).then(user => {
-      res.status(200).json(user)
-    })
+    const { user, params } = req
+    const { id } = params
+    if (![userConstants.role.ADMIN].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const data = await Users.findOne({ where: { id } })
+    res.status(200).json(data)
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }

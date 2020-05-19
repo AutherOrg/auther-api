@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "introductionUrl": {
+      "type": "string"
+    },
+    "issuerProfileUrl": {
+      "type": "string"
+    },
+    "revocationListUrl": {
+      "type": "string"
+    },
+    "publicKey": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

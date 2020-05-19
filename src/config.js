@@ -28,6 +28,14 @@ module.exports = {
       }
     }
   },
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD
+  },
+  issuer: {
+    issuerProfileUrl: process.env.ISSUER_PROFILE_URL,
+    publicKey: process.env.ISSUER_PUBLIC_KEY
+  },
   loginFromTokenUrl: process.env.LOGIN_FROM_TOKEN_URL,
   resetPasswordProcessUrl: process.env.RESET_PASSWORD_PROCESS_URL,
   applicationName: process.env.APPLICATION_NAME,
