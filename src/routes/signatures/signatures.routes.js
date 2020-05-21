@@ -27,16 +27,6 @@ const routes = passport => {
   router.delete('/:id', passport.authenticate('jwt', { session: false }), controller.destroy)
 
   /**
-   * @api {get} /signatures Get all signatures
-   * @apiVersion 1.0.0
-   * @apiName GetSignatures
-   * @apiGroup Signatures
-   * @apiPermission admin, manager, issuer
-   * @apiSuccess {Object[]} data Array of signatures (see GetSignature)
-   */
-  router.get('/', passport.authenticate('jwt', { session: false }), controller.getMany)
-
-  /**
    * @api {get} /signatures/:id Get one signature
    * @apiVersion 1.0.0
    * @apiName GetSignature
@@ -52,6 +42,29 @@ const routes = passport => {
    * @apiSuccess {String} image Signature of the person in base64
    */
   router.get('/:id', passport.authenticate('jwt', { session: false }), controller.getOne)
+
+  /**
+   * @api {get} /signatures Get all signatures
+   * @apiVersion 1.0.0
+   * @apiName GetSignatures
+   * @apiGroup Signatures
+   * @apiPermission admin, manager, issuer
+   * @apiSuccess {Object[]} data Array of signatures (see GetSignature)
+   */
+  router.get('/', passport.authenticate('jwt', { session: false }), controller.getMany)
+
+  /**
+   * @api {patch} /signatures/:id Update a signature
+   * @apiVersion 1.0.0
+   * @apiName PatchSignature
+   * @apiGroup Signatures
+   * @apiPermission admin, manager, issuer
+   * @apiParam {String} [name] Full name of the person
+   * @apiParam {String} [jobTitle] Job title or position of the person
+   * @apiParam {String} [image] Signature of the person in base64
+   * @apiSuccess {Object} data Signature (see GetSignature)
+   */
+  router.patch('/:id', passport.authenticate('jwt', { session: false }), controller.update)
 
   return router
 }

@@ -40,23 +40,6 @@ const destroy = async (req, res) => {
   }
 }
 
-const getMany = async (req, res) => {
-  try {
-    const { user } = req
-    if (![
-      usersConstants.role.ADMIN,
-      usersConstants.role.MANAGER,
-      usersConstants.role.ISSUER
-    ].includes(user.role)) {
-      return res.status(403).json({ error: 'Unauthorized' })
-    }
-    const data = await Signatures.findAll()
-    res.status(200).json(data)
-  } catch (e) {
-    return res.status(500).json({ error: e.message })
-  }
-}
-
 const getOne = async (req, res) => {
   try {
     const { params, user } = req
@@ -69,6 +52,23 @@ const getOne = async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' })
     }
     const data = await Signatures.findOne({ where: { id } })
+    res.status(200).json(data)
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+}
+
+const getMany = async (req, res) => {
+  try {
+    const { user } = req
+    if (![
+      usersConstants.role.ADMIN,
+      usersConstants.role.MANAGER,
+      usersConstants.role.ISSUER
+    ].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const data = await Signatures.findAll()
     res.status(200).json(data)
   } catch (e) {
     return res.status(500).json({ error: e.message })
