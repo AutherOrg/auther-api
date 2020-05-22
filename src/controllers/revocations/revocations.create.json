@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "certificateId": {
+      "type": "integer"
+    },
+    "blockcertsUuid": {
+      "type": "string"
+    },
+    "revocationReason": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

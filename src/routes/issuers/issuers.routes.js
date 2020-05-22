@@ -8,7 +8,7 @@ const routes = passport => {
    * @apiVersion 1.0.0
    * @apiName GetIssuer
    * @apiGroup Issuers
-   * @apiPermission public
+   * @apiPermission admin, manager, issuer
    * @apiSuccess {String} name
    * @apiSuccess {String} email
    * @apiSuccess {String} url Website URL
@@ -18,7 +18,7 @@ const routes = passport => {
    * @apiSuccess {String} publicKey Public Ethereum address
    * @apiSuccess {String} image Logo in base64
    */
-  router.get('/', controller.getOne)
+  router.get('/', passport.authenticate('jwt', { session: false }), controller.getOne)
 
   /**
    * @api {patch} /issuer Update issuer

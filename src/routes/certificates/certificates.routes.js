@@ -61,15 +61,15 @@ const routes = passport => {
   router.delete('/:id', passport.authenticate('jwt', { session: false }), controller.destroy)
 
   /**
-   * @api {get} /certificates/shared/:uuid Get a shared certificate.
+   * @api {get} /certificates/shared/:sharingUuid Get a shared certificate.
    * @apiVersion 1.0.0
    * @apiName GetCertificate
    * @apiGroup Certificates
    * @apiPermission public
-   * @apiDescription Get a certificate by its UUID and only if it is shared.
+   * @apiDescription Get a certificate by its sharing UUID and only if it is shared.
    * @apiSuccess {Object} certificate Certificate (see https://github.com/blockchain-certificates/cert-schema)
    */
-  router.get('/shared/:uuid', controller.getShared)
+  router.get('/shared/:sharingUuid', controller.getShared)
 
   return router
 }

@@ -6,15 +6,24 @@ const Users = require('../users/users.model')
 
 const Certificates = db.define(
   'Certificates', {
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: ''
+    },
     status: {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: constants.status.NOT_SHARED
     },
-    uuid: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+    blockcertsUuid: {
+      type: Sequelize.STRING,
       allowNull: false
+    },
+    sharingUuid: {
+      type: Sequelize.UUID,
+      allowNull: false,
+      defaultValue: Sequelize.UUIDV4
     },
     json: {
       type: Sequelize.JSON,

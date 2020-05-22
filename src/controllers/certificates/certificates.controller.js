@@ -3,8 +3,8 @@ const jsonwebtoken = require('jsonwebtoken')
 
 const config = require('../../config')
 const Certificates = require('../../models/certificates/certificates.model')
-const certificatesConstants = require('../../models/certificates/certificates.constants')
 const Users = require('../../models/users/users.model')
+const certificatesConstants = require('../../models/certificates/certificates.constants')
 const userConstants = require('../../models/users/users.constants')
 const inputService = require('../../services/input/input.service')
 const blockcertsSchemaService = require('../../services/schemas/blockcerts.schema.service')
@@ -39,9 +39,11 @@ const createWithRecipient = async (req, res) => {
       }
       // Create certificate.
       const createdCertificate = await Certificates.create({
-        json: certificate,
+        name: certificate.badge.name,
         recipientId: recipient.id,
-        creatorId: req.user.id
+        creatorId: req.user.id,
+        blockcertsUuid: certificate.id,
+        json: certificate
       })
       // Sign a token.
       const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
@@ -152,11 +154,11 @@ const getShared = async (req, res) => {
   try {
     const certificate = await Certificates.findOne({
       where: {
-        uuid: req.params.uuid
+        sharingUuid: req.params.sharingUuid
       },
       attributes: [
         'status',
-        'uuid',
+        'sharingUuid',
         'json'
       ]
     })

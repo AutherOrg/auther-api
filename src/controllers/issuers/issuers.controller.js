@@ -4,6 +4,14 @@ const inputService = require('../../services/input/input.service')
 
 const getOne = async (req, res) => {
   try {
+    const { user } = req
+    if (![
+      usersConstants.role.ADMIN,
+      usersConstants.role.MANAGER,
+      usersConstants.role.ISSUER
+    ].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
     const id = 1
     const data = await Issuers.findOne({ where: { id } })
     res.status(200).json(data)
