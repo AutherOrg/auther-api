@@ -6,7 +6,7 @@ Auther API to host and share online Blockcerts certificates.
 
 **Auther-API** is an opensource API to host and share online Blockcerts certificates.
 
-This project is purely a backend server. It's intended to be best used with the [Auther client](https://github.com/AutherOrg/auther-client) project.
+This project is purely a backend server. It's intended to be used with the [Auther client](https://github.com/AutherOrg/auther-client) project.
 
 ## Requirements
 
