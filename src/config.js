@@ -1,6 +1,10 @@
 require('dotenv').config()
 
 module.exports = {
+  application: {
+    name: process.env.APPLICATION_NAME
+  },
+  validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true',
   server: {
     protocol: process.env.SERVER_PROTOCOL,
     host: process.env.SERVER_HOST,
@@ -16,6 +20,10 @@ module.exports = {
   passport: {
     secret: process.env.PASSPORT_SECRET
   },
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD
+  },
   nodemailer: {
     transport: process.env.NODEMAILER_TRANSPORT,
     from: process.env.NODEMAILER_FROM,
@@ -28,19 +36,13 @@ module.exports = {
       }
     }
   },
-  admin: {
-    email: process.env.ADMIN_EMAIL,
-    password: process.env.ADMIN_PASSWORD
+  client: {
+    url: {
+      loginFromToken: process.env.CLIENT_URL_LOGIN_FROM_TOKEN,
+      resetPasswordProcess: process.env.CLIENT_URL_RESET_PASSWORD_PROCESS,
+      share: process.env.CLIENT_URL_SHARE,
+    }
   },
-  issuer: {
-    issuerProfileUrl: process.env.ISSUER_PROFILE_URL,
-    publicKey: process.env.ISSUER_PUBLIC_KEY
-  },
-  loginFromTokenUrl: process.env.LOGIN_FROM_TOKEN_URL,
-  resetPasswordProcessUrl: process.env.RESET_PASSWORD_PROCESS_URL,
-  shareUrl: process.env.SHARE_URL,
-  applicationName: process.env.APPLICATION_NAME,
-  validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true',
   pdf: {
     style: {
       wrapper: process.env.PDF_STYLE_WRAPPER,

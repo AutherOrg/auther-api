@@ -54,8 +54,8 @@ const createWithRecipient = async (req, res) => {
       // Notify recipient.
       const sendMailResult = await mailService.send(
         email,
-        `[${config.applicationName}] You have a new certificate`,
-        `Hello,\r\n\r\nA new certificate has been issued to you!\r\n\r\nTo share it with your contacts and manage it, click on this link:\r\n${config.loginFromTokenUrl}${token}\r\n\r\nPlease also find the PDF version attached in this email. At last, your certificate is attached as a .json file too, which can be viewed and verified on https://www.blockcerts.org/.\r\n\r\nThe ${config.applicationName} team.`,
+        `[${config.application.name}] You have a new certificate`,
+        `Hello,\r\n\r\nA new certificate has been issued to you!\r\n\r\nTo share it with your contacts and manage it, click on this link:\r\n${config.client.url.loginFromToken}${token}\r\n\r\nPlease also find the PDF version attached in this email. At last, your certificate is attached as a .json file too, which can be viewed and verified on https://www.blockcerts.org/.\r\n\r\nThe ${config.application.name} team.`,
         '', [
           {
             filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.pdf`,

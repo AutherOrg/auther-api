@@ -28,7 +28,7 @@ const create = async (
     orientation: 'portrait'
   }
 ) => new Promise(async (resolve, reject) => {
-  const url = `${config.shareUrl}${sharingUuid}`
+  const url = `${config.client.url.share}${sharingUuid}`
   const verificationHtml = await generateVerificationHtml(url)
   const html = `<div style="${config.pdf.style.wrapper}">${certificateHtml}${verificationHtml}</div>`
   htmlPdf.create(html, options).toBuffer(async (err, pdfBuffer) => {

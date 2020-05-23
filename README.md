@@ -20,12 +20,11 @@ This project is purely a backend server. It's intended to be used with the [Auth
 ````
 yarn install
 cp .env.example .env
-cp src/seeders/1_users.seed.js.example src/seeders/1_users.seed.js
 ````
 
 *If you don't have yarn, you can use npm instead.*
 
-Edit .env to set your credentials and src/seeders/1_users.seed.js to set the administrator account. For PASSPORT_SECRET you can use this generator ofr instance: https://codepen.io/corenominal/pen/rxOmMJ
+Edit .env to set your credentials, the administrator account and other settings. For PASSPORT_SECRET you can use this generator for instance: https://codepen.io/corenominal/pen/rxOmMJ
 
 Init the database:
 
@@ -112,6 +111,10 @@ All the emails sent by the server are logged with the format:
 + to is the recipient email address
 + text is the message in text format
 + result is either success or an error message
+
+## Customization
+
+See .env.example and adapt your .env
 
 ## General discussion, installation and configuration help
 
