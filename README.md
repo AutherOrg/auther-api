@@ -1,6 +1,8 @@
 # Auther API
 
-Auther API to host and share online Blockcerts certificates. Demonstration: https://auther.org/demo
+Auther API to host and share online Blockcerts certificates.
+
+Demonstration: https://auther.org/demo
 
 ## Introduction
 
@@ -122,7 +124,7 @@ See .env.example and adapt your .env file.
 
 + [Auther.org forum](https://auther.org/forum)
 
-## Paid technical support, development and commercial services
+## Technical support and development services
 
 + You can [contact Auther's original author](https://guillaumeduveau.com/en/contact)
 
