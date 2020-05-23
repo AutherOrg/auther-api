@@ -1,6 +1,6 @@
 # Auther API
 
-Auther API to host and share online Blockcerts certificates.
+Auther API to host and share online Blockcerts certificates. Demonstration: https://auther.org/demo
 
 ## Introduction
 
@@ -45,7 +45,7 @@ yarn start
 You can manage the application service as you want. Here is a short example with [PM2](https://pm2.keymetrics.io/):
 
 + Install PM2 globally: `yarn global add pm2`
-+ Start a PM2 app: `pm2 start src/server.js`
++ Start a PM2 app: `pm2 start src/server.js --name api.prod`
 + Tail the PM2 logs: `pm2 logs`
 + Monitor the PM2 logs : `pm2 monitor`
 + Flush the PM2 logs: `pm2 flush`
@@ -67,7 +67,7 @@ Or you can use a Nginx proxy and forward IPs, for instance (without HTTPS but it
 ````
 server {
   listen *:80;
-  server_name api.auther.com;
+  server_name api.auther.org;
   location / {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -81,6 +81,8 @@ server {
 ````
 
 ... where `4000` in `proxy_pass http://127.0.0.1:4000/` is SERVER_PORT defined in .env.
+
+Of course HTTPS is way better but let's keep this doc simple.
 
 ## Logs
 
@@ -114,7 +116,7 @@ All the emails sent by the server are logged with the format:
 
 ## Customization
 
-See .env.example and adapt your .env
+See .env.example and adapt your .env file.
 
 ## General discussion, installation and configuration help
 
