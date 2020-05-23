@@ -8,6 +8,7 @@ const certificatesConstants = require('../../models/certificates/certificates.co
 const userConstants = require('../../models/users/users.constants')
 const inputService = require('../../services/input/input.service')
 const blockcertsSchemaService = require('../../services/schemas/blockcerts.schema.service')
+const pdfService = require('../../services/pdf/pdf.service')
 const mailService = require('../../services/mail/mail.service')
 
 const createWithRecipient = async (req, res) => {
@@ -45,17 +46,27 @@ const createWithRecipient = async (req, res) => {
         blockcertsUuid: certificate.id,
         json: certificate
       })
+      // Generate PDF.
+      const { pdfBase64, pdfBuffer } = await pdfService.create(certificate.displayHtml, createdCertificate.sharingUuid)
+      await createdCertificate.update({ pdf: pdfBase64})
       // Sign a token.
       const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
       // Notify recipient.
       const sendMailResult = await mailService.send(
         email,
         `[${config.applicationName}] You have a new certificate`,
-        `Hello,\r\n\r\nA new certificate has been issued to you.\r\n\r\nClick on this link to manage it:\r\n${config.loginFromTokenUrl}${token}\r\n\r\nThis will allow you to easily share it online with your contacts. Your certificate is attached in this email as well, as a JSON file. You can alternatively view it on https://www.blockcerts.org/ and send it to your contacts.\r\n\r\nThe ${config.applicationName} team.`,
-        '', [{
-          filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.json`,
-          content: JSON.stringify(createdCertificate.json)
-        }]
+        `Hello,\r\n\r\nA new certificate has been issued to you!\r\n\r\nTo share it with your contacts and manage it, click on this link:\r\n${config.loginFromTokenUrl}${token}\r\n\r\nPlease also find the PDF version attached in this email. At last, your certificate is attached as a .json file too, which can be viewed and verified on https://www.blockcerts.org/.\r\n\r\nThe ${config.applicationName} team.`,
+        '', [
+          {
+            filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.pdf`,
+            content: Buffer.from(pdfBuffer, 'base64'),
+            contentType: 'application/pdf'
+          },
+          {
+            filename: `${createdCertificate.json.badge.name}-${createdCertificate.json.recipientProfile.name}.json`,
+            content: JSON.stringify(createdCertificate.json)
+          }
+        ]
       )
       return res.status(200).json({
         certificate: createdCertificate,
@@ -107,7 +118,11 @@ const getAll = async (req, res) => {
         { creatorId: user.id }
       ]
     }
-    const certificates = await Certificates.findAll({
+    let scope = 'defaultScope'
+    if (query.withJson) {
+      scope = 'withJson'
+    }
+    const certificates = await Certificates.scope(scope).findAll({
       where,
       order: [
         ['id', 'DESC']
@@ -143,7 +158,7 @@ const getOne = async (req, res) => {
         { creatorId: user.id }
       ]
     }
-    let scope
+    let scope = 'defaultScope'
     if (query.full) {
       scope = 'full'
     }
@@ -193,7 +208,7 @@ const update = async (req, res) => {
         }
       }
     )
-    const updated = await Certificates.findOne({ where: { id } })
+    const updated = await Certificates.scope('withJson').findOne({ where: { id } })
     return res.status(200).json(updated)
   } catch (e) {
     return res.status(500).json({ error: e.message })

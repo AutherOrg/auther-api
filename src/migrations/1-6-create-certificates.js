@@ -17,7 +17,7 @@ module.exports = {
         status: {
           type: Sequelize.INTEGER,
           allowNull: false,
-          defaultValue: constants.status.NOT_SHARED
+          defaultValue: constants.status.SHARED
         },
         recipientId: {
           type: Sequelize.INTEGER,
@@ -56,7 +56,7 @@ module.exports = {
           type: Sequelize.JSON
         },
         pdf: {
-          type: Sequelize.BLOB('medium')
+          type: Sequelize.TEXT('medium')
         }
       }
     )

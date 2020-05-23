@@ -38,6 +38,17 @@ module.exports = {
   },
   loginFromTokenUrl: process.env.LOGIN_FROM_TOKEN_URL,
   resetPasswordProcessUrl: process.env.RESET_PASSWORD_PROCESS_URL,
+  shareUrl: process.env.SHARE_URL,
   applicationName: process.env.APPLICATION_NAME,
-  validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true'
+  validateCertificates: process.env.VALIDATE_CERTIFICATES === 'true',
+  pdf: {
+    style: {
+      wrapper: process.env.PDF_STYLE_WRAPPER,
+      verification: {
+        wrapper: process.env.PDF_STYLE_VERIFICATION_WRAPPER,
+        text: process.env.PDF_STYLE_VERIFICATION_TEXT,
+        link: process.env.PDF_STYLE_VERIFICATION_LINK
+      }
+    }
+  }
 }

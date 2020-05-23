@@ -14,7 +14,7 @@ const Certificates = db.define(
     status: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: constants.status.NOT_SHARED
+      defaultValue: constants.status.SHARED
     },
     blockcertsUuid: {
       type: Sequelize.STRING,
@@ -27,9 +27,13 @@ const Certificates = db.define(
     },
     json: {
       type: Sequelize.JSON,
+      allowNull: false,
       get (field) {
         return typeof this.getDataValue(field) === 'string' ? JSON.parse(this.getDataValue(field)) : this.getDataValue(field)
       }
+    },
+    pdf: {
+      type: Sequelize.STRING
     }
   }, {
     defaultScope: {
