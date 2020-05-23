@@ -131,7 +131,7 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
   try {
-    const { user, params } = req
+    const { params, query, user } = req
     const { id } = params
     const where = { id }
     if (![
@@ -143,7 +143,11 @@ const getOne = async (req, res) => {
         { creatorId: user.id }
       ]
     }
-    const certificate = await Certificates.findOne({ where })
+    let scope
+    if (query.full) {
+      scope = 'full'
+    }
+    const certificate = await Certificates.scope(scope).findOne({ where })
     return res.status(200).json(certificate)
   } catch (e) {
     return res.status(500).json({ error: e.message })

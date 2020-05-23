@@ -54,6 +54,9 @@ module.exports = {
         },
         json: {
           type: Sequelize.JSON
+        },
+        pdf: {
+          type: Sequelize.BLOB('medium')
         }
       }
     )

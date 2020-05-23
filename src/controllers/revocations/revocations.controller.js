@@ -24,7 +24,7 @@ const create = async (req, res) => {
     if (blockcertsUuid) {
       where.blockcertsUuid = blockcertsUuid
     }
-    const certificate = await Certificates.findOne({ where })
+    const certificate = await Certificates.scope('withJson').findOne({ where })
     if (certificate) {
       if (![
         usersConstants.role.ADMIN,

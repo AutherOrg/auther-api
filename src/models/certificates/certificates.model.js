@@ -31,6 +31,18 @@ const Certificates = db.define(
         return typeof this.getDataValue(field) === 'string' ? JSON.parse(this.getDataValue(field)) : this.getDataValue(field)
       }
     }
+  }, {
+    defaultScope: {
+      attributes: { exclude: ['json', 'pdf'] }
+    },
+    scopes: {
+      full: {
+        attributes: { }
+      },
+      withJson: {
+        attributes: { exclude: ['pdf'] }
+      }
+    }
   }
 )
 
