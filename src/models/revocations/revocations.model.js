@@ -6,6 +6,11 @@ const Users = require('../users/users.model')
 
 const Revocations = db.define(
   'Revocations', {
+    revocationReason: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'Revoked by the issuer.'
+    },
     blockcertsUuid: {
       type: Sequelize.STRING,
       allowNull: false

@@ -37,7 +37,7 @@ const getRevocationList = async (req, res) => {
     const data = await Revocations.findAll()
     const revocations = data.map(revocation => {
       return {
-        id: revocation.certificateUuid,
+        id: revocation.blockcertsUuid,
         revocationReason: revocation.revocationReason
       }
     })

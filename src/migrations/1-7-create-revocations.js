@@ -8,6 +8,11 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true
         },
+        revocationReason: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          defaultValue: 'Revoked by the issuer.'
+        },
         certificateId: {
           type: Sequelize.INTEGER,
           references: {
