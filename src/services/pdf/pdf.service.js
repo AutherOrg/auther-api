@@ -17,7 +17,7 @@ const generateQrCodeHtml = async url => {
 const generateVerificationHtml = async url => {
   const qrCodeHtml = await generateQrCodeHtml(url)
   const link = `<a href="${url}" style="color: #000000;">${url}</a>`
-  const verificationHtml = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; ">${qrCodeHtml}<div style="font-size: 10px">To verify this certificate, scan the QR code or open this link: ${link}</div>`
+  const verificationHtml = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; ">${qrCodeHtml}<div><div style="font-size: 10px">To verify this certificate, scan the QR code or open this link: ${link}</div><div style="margin-top: 20px; font-size: 10px; text-align: right;">Powered by <a href="https://auther.org" style="color: #000000;">Auther</a></div></div></div>`
   return verificationHtml
 }
 
@@ -28,9 +28,9 @@ const create = async (certificateHtml, sharingUuid) => {
   const page = await browser.newPage()
   const url = `${config.client.url.share}${sharingUuid}`
   const verificationHtml = await generateVerificationHtml(url)
-  const html = `<div style="height: calc(100vh - 16px); display: flex; flex-direction: column; justify-content: center;">${certificateHtml}</div>`
+  const html = `<div style="height: calc(100vh - 20px); display: flex; flex-direction: column; justify-content: center;">${certificateHtml}</div>`
   await page.setContent(html)
-  const pdf = await page.pdf({
+  const pdfBuffer = await page.pdf({
     format: 'A4',
     landscape: true,
     printBackground: true,
@@ -42,11 +42,14 @@ const create = async (certificateHtml, sharingUuid) => {
       left: 50,
       right: 50,
       top: 50
-    },
-    path: './test.pdf'
+    }
   })
   await browser.close()
-  return pdf
+  const pdfBase64 = `data:application/pdf;base64,${pdfBuffer.toString('base64')}`
+  return {
+    pdfBase64,
+    pdfBuffer
+  }
 }
 
 module.exports = {

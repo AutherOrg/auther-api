@@ -18,7 +18,8 @@ module.exports = {
           references: {
             model: 'Certificates',
             key: 'id'
-          }
+          },
+          onDelete: 'SET NULL'
         },
         creatorId: {
           type: Sequelize.INTEGER,
