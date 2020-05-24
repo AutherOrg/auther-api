@@ -40,17 +40,7 @@ module.exports = {
     url: {
       loginFromToken: process.env.CLIENT_URL_LOGIN_FROM_TOKEN,
       resetPasswordProcess: process.env.CLIENT_URL_RESET_PASSWORD_PROCESS,
-      share: process.env.CLIENT_URL_SHARE,
-    }
-  },
-  pdf: {
-    style: {
-      wrapper: process.env.PDF_STYLE_WRAPPER,
-      verification: {
-        wrapper: process.env.PDF_STYLE_VERIFICATION_WRAPPER,
-        text: process.env.PDF_STYLE_VERIFICATION_TEXT,
-        link: process.env.PDF_STYLE_VERIFICATION_LINK
-      }
+      share: process.env.CLIENT_URL_SHARE
     }
   }
 }
