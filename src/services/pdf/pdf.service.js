@@ -17,7 +17,7 @@ const generateQrCodeHtml = async url => {
 const generateVerificationHtml = async url => {
   const qrCodeHtml = await generateQrCodeHtml(url)
   const link = `<a href="${url}" style="color: #000000;">${url}</a>`
-  const verificationHtml = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; ">${qrCodeHtml}<div style="height: 60px; display: flex; flex-direction: column; justify-content: space-between;"><div style="font-size: 8px">To verify this certificate, scan the QR code or open this link: ${link}</div><div style="font-size: 8px; text-align: right;">Powered by <a href="https://auther.org" style="color: #000000;">Auther</a>, an opensource implementation of Blockcerts</div></div></div>`
+  const verificationHtml = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; ">${qrCodeHtml}<div><div style="font-size: 8px; margin: 8px;">To verify this certificate, scan the QR code or open this link: ${link}</div><div style="font-size: 8px; margin: 8px; text-align: right;">Powered by <a href="https://auther.org" style="color: #000000;">Auther</a>, an opensource implementation of Blockcerts</div></div></div>`
   return verificationHtml
 }
 
