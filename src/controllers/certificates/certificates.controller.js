@@ -47,8 +47,8 @@ const createWithRecipient = async (req, res) => {
         json: certificate
       })
       // Generate PDF.
-      const { pdfBase64, pdfBuffer } = await pdfService.create(certificate.displayHtml, createdCertificate.sharingUuid)
-      await createdCertificate.update({ pdf: pdfBase64})
+      const { pdfBase64, pdfBuffer } = await pdfService.html2pdf(certificate.displayHtml, createdCertificate.sharingUuid)
+      await createdCertificate.update({ pdf: pdfBase64 })
       // Sign a token.
       const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
       // Notify recipient.

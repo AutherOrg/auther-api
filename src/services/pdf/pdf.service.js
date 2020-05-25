@@ -1,8 +1,10 @@
 
-const puppeteer = require('puppeteer')
 const qrCode = require('qrcode')
 
 const config = require('../../config')
+const phantomjs = require('./phantomjs.engine.pdf.service')
+// const puppeteer = require('./puppeteer.engine.pdf.service')
+const engine = phantomjs
 
 const generateQrCodeHtml = async url => {
   try {
@@ -21,37 +23,12 @@ const generateVerificationHtml = async url => {
   return verificationHtml
 }
 
-const create = async (certificateHtml, sharingUuid) => {
-  const browser = await puppeteer.launch({
-    headless: true
-  })
-  const page = await browser.newPage()
-  const url = `${config.client.url.share}${sharingUuid}`
-  const verificationHtml = await generateVerificationHtml(url)
-  const html = `<div style="height: calc(100vh - 20px); display: flex; flex-direction: column; justify-content: center;">${certificateHtml}</div>`
-  await page.setContent(html)
-  const pdfBuffer = await page.pdf({
-    format: 'A4',
-    landscape: true,
-    printBackground: true,
-    displayHeaderFooter: true,
-    headerTemplate: `${config.application.name}`,
-    footerTemplate: verificationHtml,
-    margin: {
-      bottom: 140,
-      left: 50,
-      right: 50,
-      top: 50
-    }
-  })
-  await browser.close()
-  const pdfBase64 = `data:application/pdf;base64,${pdfBuffer.toString('base64')}`
-  return {
-    pdfBase64,
-    pdfBuffer
-  }
+const html2pdf = async (certificateHtml, sharingUuid) => {
+  const sharingUrl = `${config.client.url.share}${sharingUuid}`
+  const verificationHtml = await generateVerificationHtml(sharingUrl)
+  return engine.html2pdf(certificateHtml, verificationHtml)
 }
 
 module.exports = {
-  create
+  html2pdf
 }
