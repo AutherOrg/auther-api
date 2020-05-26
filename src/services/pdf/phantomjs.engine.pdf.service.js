@@ -8,11 +8,7 @@ const html2pdf = (certificateHtml, verificationHtml) => {
     htmlPdf.create(html, {
       format: 'A4',
       orientation: 'landscape',
-      border: '1cm',
-      viewportSize: {
-        width: 1920,
-        height: 1080
-      }
+      border: '1cm'
     }).toBuffer(async (err, pdfBuffer) => {
       if (err) {
         reject(err)
