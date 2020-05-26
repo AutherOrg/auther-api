@@ -47,8 +47,7 @@ module.exports = {
         },
         image: {
           type: Sequelize.TEXT('medium'),
-          allowNull: false,
-          defaultValue: ''
+          allowNull: false
         }
       }
     )

@@ -24,8 +24,7 @@ const Signatures = db.define(
     },
     image: {
       type: Sequelize.TEXT('medium'),
-      allowNull: false,
-      defaultValue: ''
+      allowNull: false
     }
   }
 )
