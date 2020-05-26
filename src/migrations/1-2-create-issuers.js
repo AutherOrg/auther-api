@@ -50,8 +50,7 @@ module.exports = {
         },
         image: {
           type: Sequelize.TEXT('medium'),
-          allowNull: false,
-          defaultValue: ''
+          allowNull: false
         },
         status: {
           type: Sequelize.INTEGER,

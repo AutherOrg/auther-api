@@ -45,8 +45,7 @@ const Issuers = db.define(
     },
     image: {
       type: Sequelize.TEXT('medium'),
-      allowNull: false,
-      defaultValue: ''
+      allowNull: false
     },
     status: {
       type: Sequelize.INTEGER,
