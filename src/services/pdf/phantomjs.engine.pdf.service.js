@@ -4,11 +4,8 @@ const config = require('../../config')
 
 const html2pdf = (certificateHtml, verificationHtml) => {
   return new Promise((resolve, reject) => {
-    const html = `<div style="${config.pdf.style.wrapper}">${certificateHtml}${verificationHtml}</div>`
+    const html = `<body style="zoom: 0.55;"><div style="${config.pdf.style.wrapper}">${certificateHtml}${verificationHtml}</div></body>`
     htmlPdf.create(html, {
-      html: {
-        zoom: config.pdf.zoom
-      },
       format: 'A4',
       orientation: 'landscape',
       border: '1cm'
