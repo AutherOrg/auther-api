@@ -6,6 +6,9 @@ const html2pdf = (certificateHtml, verificationHtml) => {
   return new Promise((resolve, reject) => {
     const html = `<div style="${config.pdf.style.wrapper}">${certificateHtml}${verificationHtml}</div>`
     htmlPdf.create(html, {
+      html: {
+        zoom: config.pdf.zoom
+      },
       format: 'A4',
       orientation: 'landscape',
       border: '1cm'

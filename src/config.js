@@ -44,6 +44,7 @@ module.exports = {
     }
   },
   pdf: {
+    zoom: process.env.PDF_ZOOM,
     style: {
       wrapper: process.env.PDF_STYLE_WRAPPER,
       verification: {
