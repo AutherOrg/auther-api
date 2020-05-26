@@ -1,8 +1,10 @@
 const htmlPdf = require('html-pdf')
 
+const config = require('../../config')
+
 const html2pdf = (certificateHtml, verificationHtml) => {
   return new Promise((resolve, reject) => {
-    const html = `<div style="height: 100%; display: flex; flex-direction: column; justify-content: center;">${certificateHtml}${verificationHtml}</div>`
+    const html = `<div style="${config.pdf.style.wrapper}">${certificateHtml}${verificationHtml}</div>`
     htmlPdf.create(html, {
       format: 'A4',
       orientation: 'landscape',

@@ -2,9 +2,7 @@
 const qrCode = require('qrcode')
 
 const config = require('../../config')
-const phantomjs = require('./phantomjs.engine.pdf.service')
-// const puppeteer = require('./puppeteer.engine.pdf.service')
-const engine = phantomjs
+const engine = require('./phantomjs.engine.pdf.service')
 
 const generateQrCodeHtml = async url => {
   try {
@@ -18,8 +16,12 @@ const generateQrCodeHtml = async url => {
 
 const generateVerificationHtml = async url => {
   const qrCodeHtml = await generateQrCodeHtml(url)
-  const link = `<a href="${url}" style="color: #000000;">${url}</a>`
-  const verificationHtml = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; ">${qrCodeHtml}<div><div style="font-size: 8px; margin: 8px;">To verify this certificate, scan the QR code or open this link: ${link}</div><div style="font-size: 8px; margin: 8px; text-align: right;">Powered by <a href="https://auther.org" style="color: #000000;">Auther</a>, an opensource implementation of Blockcerts</div></div></div>`
+  const verificationLink = `<a href="${url}" style="${config.pdf.style.verification.link}">${url}</a>`
+  const verificationTextAndLink = `<div style="${config.pdf.style.verification.text}">To verify this certificate, scan the QR code or open this link: ${verificationLink}</div>`
+  const autherLink = `<a href="https://auther.org" style="${config.pdf.style.verification.link}">Auther</a>`
+  const autherTextAndLink = `<div style="${config.pdf.style.verification.text} margin-top: 16px; text-align: right;">Powered by ${autherLink}, an opensource implementation of Blockcerts</div>`
+  const verificationAndAuther = `<div>${verificationTextAndLink}${autherTextAndLink}</div>`
+  const verificationHtml = `<div style="${config.pdf.style.verification.wrapper}">${qrCodeHtml}${verificationAndAuther}<div>`
   return verificationHtml
 }
 

@@ -14,7 +14,6 @@ This project is purely a backend server. It's intended to be used with the [Auth
 
 + Node.js (version >= 10, version 13 prefered).
 + A database (MySql >= 5.7.8 or MariaDb >= 10.2.7)
-+ Chrome headless must be able to run (see https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md and troubleshooting section)
 
 ## Installation
 
@@ -126,11 +125,6 @@ See .env.example and adapt your .env file.
 You can test the emails send configuration and PDF generation (Puppeteer / Chrome headless) with:
 
 ````yarn test````
-
-For Puppeteer, on Debian Buster I had to install:
-````
-sudo apt install libgtk-3-0 libasound2 libgbm1 libdrm2 libxss1 libatk-bridge2.0-0 libnss3 libxtst6 libxcb-dri3-0 libx11-xcb1
-````
 
 ## General discussion, installation and configuration help
 
