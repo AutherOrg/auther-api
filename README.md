@@ -122,9 +122,17 @@ See .env.example and adapt your .env file.
 
 ## Troubleshooting
 
-You can test the emails send configuration and PDF generation (Puppeteer / Chrome headless) with:
+You can test the emails send configuration and PDF generation with:
 
 ````yarn test````
+
+PDF generation can be tricky, especially with custom fonts and global size increase of render. For the fonts, they must be installed in the system in order for PhantomJS to use them. For the global size increase, on a classic server there is no Xorg, just a framebuffer which is generally in 1024x768. So without corrections, the PDF output you see on your say 1920x1080 local machine will be a lot magnified on the production server.
+
+The corrections are made for a 1024x768 server with a local dev machine in 1920x1080. You can adjust things in .env, especially the font size in PDF_STYLE_WRAPPER.
+
+Please refer to https://github.com/marcbachmann/node-html-pdf and https://github.com/ariya/phantomjs for further documentation.
+
+Oh, and I started by using Puppeteer. But ditched it. It requires to install a lot of Xorg librairies, even sound librairies. This is very bad on a server. So I kept PhantoJS despite it being deprecated.
 
 ## General discussion, installation and configuration help
 
