@@ -78,8 +78,9 @@ const resetPassword = async (req, res) => {
       const resetPasswordToken = jsonwebtoken.sign({ id: existingUser.id }, config.passport.secret, { expiresIn: '1h' })
       const sendMailResult = await mailService.send(
         email,
-        `[${config.application.name}] Reset password`,
-        `Hello,\r\n\r\nPlease click on this link to set a new password:\r\n${config.client.url.resetPasswordProcess}${resetPasswordToken}\r\n\r\nThe ${config.application.name} team.`,
+        'password', {
+          passwordLink: `${config.client.url.resetPasswordProcess}${resetPasswordToken}`
+        },
         ''
       )
       return res.status(200).json({
