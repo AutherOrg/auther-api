@@ -10,12 +10,13 @@ const send = async (to, template, locals, attachments) => {
       newline: 'unix',
       path: '/usr/sbin/sendmail'
     }
-    // const transporter = nodemailer.createTransport(transport)
+    const transporter = nodemailer.createTransport(transport)
     const email = new Email({
       message: {
         from: config.nodemailer.from
       },
-      transport,
+      transport: transporter,
+      send: true,
       subjectPrefix: `[${config.application.name}] `,
       views: {
         options: {
