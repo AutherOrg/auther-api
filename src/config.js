@@ -58,7 +58,8 @@ module.exports = {
   email: {
     template: {
       directory: process.env.EMAIL_TEMPLATE_DIRECTORY,
-      logo: process.env.EMAIL_LOGO
+      logo: process.env.EMAIL_LOGO,
+      footer: process.env.EMAIL_FOOTER
     }
   }
 }

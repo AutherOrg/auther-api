@@ -27,12 +27,14 @@ const send = async (to, template, locals, attachments) => {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: `${__dirname}/templates/${config.email.template.directory}`
+          relativeTo: `${__dirname}/templates/${config.email.template.directory}`,
+          images: true
         }
       }
     })
     locals.logo = config.email.template.logo
     locals.applicationName = config.application.name
+    locals.footer = config.email.template.footer
     const result = await email.send({
       template: `${__dirname}/templates/${config.email.template.directory}/${template}`,
       message: {
@@ -43,18 +45,6 @@ const send = async (to, template, locals, attachments) => {
     })
     console.log(`To: ${to}, Template: ${template}, Success`)
     return result
-
-    // const transporter = nodemailer.createTransport(transport)
-    // const result = await transporter.sendMail({
-    //   from: config.nodemailer.from,
-    //   to,
-    //   subject,
-    //   text,
-    //   html,
-    //   attachments
-    // })
-    // console.log(`To: ${to}, Subject: ${subject}, Success`)
-    // return result
   } catch (e) {
     console.log(`To: ${to}, Template: ${template}, Error: ${e.message}`)
     return {
