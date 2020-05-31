@@ -10,12 +10,12 @@ const send = async (to, template, locals, attachments) => {
       newline: 'unix',
       path: '/usr/sbin/sendmail'
     }
-    const transporter = nodemailer.createTransport(transport)
+    // const transporter = nodemailer.createTransport(transport)
     const email = new Email({
       message: {
         from: config.nodemailer.from
       },
-      transport: transporter,
+      transport,
       subjectPrefix: `[${config.application.name}] `,
       views: {
         options: {
@@ -35,10 +35,12 @@ const send = async (to, template, locals, attachments) => {
     const result = await email.send({
       template: `${__dirname}/templates/${config.email.template.directory}/${template}`,
       message: {
-        to
+        to,
+        attachments
       },
       locals
     })
+    console.log(`To: ${to}, Template: ${template}, Success`)
     return result
 
     // const transporter = nodemailer.createTransport(transport)

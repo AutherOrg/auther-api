@@ -55,7 +55,6 @@ const createWithRecipient = async (req, res) => {
       const sendMailResult = await mailService.send(
         email,
         'certificate', {
-          applicationName: config.application.name,
           manageLink: `${config.client.url.loginFromToken}${token}`
         }, [
           {
