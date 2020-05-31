@@ -27,8 +27,7 @@ const send = async (to, template, locals, attachments) => {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: `${__dirname}/templates/${config.email.template.directory}`,
-          images: true
+          relativeTo: `${__dirname}/templates/${config.email.template.directory}`
         }
       }
     })
