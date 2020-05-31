@@ -54,5 +54,11 @@ module.exports = {
         link: process.env.PDF_STYLE_VERIFICATION_LINK
       }
     }
+  },
+  email: {
+    template: {
+      directory: process.env.EMAIL_TEMPLATE_DIRECTORY,
+      logo: process.env.EMAIL_LOGO
+    }
   }
 }

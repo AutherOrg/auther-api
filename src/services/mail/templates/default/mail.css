@@ -1,0 +1,91 @@
+body {
+  background-color: #fafafa;
+  color: #212121;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+header {
+  margin: 3em 0;
+  width: 100%;
+  text-align: center;
+}
+
+main {
+  margin: 1em;
+  padding: 1em;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+main p {
+  margin-top: 0;
+  text-align: justify;
+}
+
+main a {
+  color: #212121;
+}
+
+main a:hover {
+  text-decoration: none;
+}
+
+main p.cta {
+  text-align: center;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+main p.cta a {
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  outline: 0;
+  position: relative;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  -moz-user-select: none;
+  -webkit-appearance: none;
+  background-color: #3f51b5;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-weight: 500;
+  line-height: 1.75;
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+main a.cta:hover {
+  background-color: #303f9f;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+main p.signature {
+  margin-bottom: 0;
+  text-align: right;
+  font-style: italic;
+}
+
+footer {
+  margin-top: 3em;
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 0.7em;
+}
+
+footer a {
+  color: #212121;
+}
+
+footer a:hover {
+  text-decoration: none;
+}
