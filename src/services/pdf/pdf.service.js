@@ -21,7 +21,7 @@ const generateVerificationHtml = async url => {
   const autherLink = `<a href="https://auther.org" style="${config.pdf.style.verification.link}">Auther</a>`
   const autherTextAndLink = `<div style="${config.pdf.style.verification.text} margin-top: 8px; text-align: right;">Powered by ${autherLink}, an opensource implementation of Blockcerts</div>`
   const verificationAndAuther = `<div>${verificationTextAndLink}${autherTextAndLink}</div>`
-  const verificationHtml = `<div style="${config.pdf.style.verification.wrapper}">${qrCodeHtml}${verificationAndAuther}<div>`
+  const verificationHtml = `<div style="${config.pdf.style.verification.wrapper}">${qrCodeHtml}${verificationAndAuther}</div>`
   return verificationHtml
 }
 
