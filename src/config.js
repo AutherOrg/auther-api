@@ -53,7 +53,8 @@ module.exports = {
         text: process.env.PDF_STYLE_VERIFICATION_TEXT,
         link: process.env.PDF_STYLE_VERIFICATION_LINK
       }
-    }
+    },
+    poweredByAuther: process.env.PDF_POWERED_BY_AUTHER
   },
   email: {
     template: {
