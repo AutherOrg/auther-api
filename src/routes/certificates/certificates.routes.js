@@ -71,6 +71,17 @@ const routes = passport => {
    */
   router.get('/shared/:sharingUuid', controller.getShared)
 
+  /**
+   * @api {get} /certificates/resendemail:id Resend a certificate email.
+   * @apiVersion 1.0.0
+   * @apiName GetCertificateResendEmail
+   * @apiGroup Certificates
+   * @apiPermission admin, manager, issuer
+   * @apiDescription Resend a certificate email.
+   * @apiSuccess {Number} rows
+   */
+  router.get('/:id/resendemail', passport.authenticate('jwt', { session: false }), controller.reSendEmail)
+
   return router
 }
 

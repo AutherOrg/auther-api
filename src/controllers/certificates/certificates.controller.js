@@ -191,6 +191,51 @@ const getShared = async (req, res) => {
   }
 }
 
+const reSendEmail = async (req, res) => {
+  try {
+    const { params, user } = req
+    if (![
+      userConstants.role.ADMIN,
+      userConstants.role.MANAGER,
+      userConstants.role.ISSUER
+    ].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    const { id } = params
+    const certificate = await Certificates.scope('full').findOne({ where: { id } })
+    const email = certificate.json.recipient.identity.toLowerCase()
+    const recipient = await Users.findOne({ where: { email } })
+    if (recipient) {
+      // Sign a token.
+      const token = jsonwebtoken.sign({ id: recipient.id }, config.passport.secret, { expiresIn: '30 days' })
+      // Notify recipient.
+      const sendMailResult = await mailService.send(
+        email,
+        'certificate', {
+          manageLink: `${config.client.url.loginFromToken}${token}`
+        }, [
+          {
+            filename: `${certificate.json.badge.name}-${certificate.json.recipientProfile.name}.pdf`,
+            content: Buffer.from(certificate.pdf, 'base64'),
+            contentType: 'application/pdf'
+          },
+          {
+            filename: `${certificate.json.badge.name}-${certificate.json.recipientProfile.name}.json`,
+            content: JSON.stringify(certificate.json)
+          }
+        ]
+      )
+      return res.status(200).json({
+        certificate,
+        sendMailResult
+      })
+    }
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json({ error: e.message })
+  }
+}
+
 const update = async (req, res) => {
   try {
     const { body, params, user } = req
@@ -221,5 +266,6 @@ module.exports = {
   getAll,
   getOne,
   getShared,
+  reSendEmail,
   update
 }
