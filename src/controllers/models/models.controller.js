@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize')
 const Models = require('../../models/models/models.model')
 const Signatures = require('../../models/signatures/signatures.model')
 const usersConstants = require('../../models/users/users.constants')
@@ -92,6 +93,9 @@ const getOne = async (req, res) => {
     const options = { where: { id } }
     if (query.withSignatures) {
       options.include = Signatures
+      options.order = [
+        [Sequelize.literal('`Signatures->ModelSignatures`.`updatedAt`'), 'asc']
+      ]
     }
     const data = await Models.findOne(options)
     return res.status(200).json(data)
@@ -124,14 +128,6 @@ const update = async (req, res) => {
     await Models.update(data, { where: { id } })
     const updated = await Models.findOne({ where: { id } })
     if (signatures) {
-      // signatures.forEach(async id => {
-      //   const count = await Signatures.count({
-      //     where: { id }
-      //   })
-      //   if (count === 0) {
-      //     return res.status(400).json({ error: 'Bad request' })
-      //   }
-      // })
       updated.setSignatures(signatures)
     }
     return res.status(200).json(updated)
