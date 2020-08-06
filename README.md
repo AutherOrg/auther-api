@@ -1,5 +1,8 @@
 # Auther API
 
+[![Lint code](https://github.com/AutherOrg/auther-api/workflows/Lint%20code/badge.svg)](https://github.com/AutherOrg/auther-api/actions?query=workflow%3A%22Lint+code%22)
+[![Code style](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/standard/standard)
+
 Auther API to host and share online Blockcerts certificates.
 
 Demonstration: https://auther.org/demo
