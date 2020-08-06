@@ -1,5 +1,4 @@
 /* eslint-env jest */
-const config = require('../../config')
 const service = require('./mail.service')
 
 test('Send email', async () => {
